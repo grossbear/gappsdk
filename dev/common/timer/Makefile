@@ -1,7 +1,7 @@
 #timer dev programme build makefile
 
 CXX=g++
-CFLAGS=-std=gnu++11
+CFLAGS=-std=gnu++11 -Wall -pedantic
 FRAMEWORKPATH=../../../framework
 BASECOMMONPATH=../../../framework/base/common
 
@@ -10,13 +10,13 @@ objdir_tgt = $(OBJDIR)-$(wildcard $(OBJDIR))
 objdir_present = $(OBJDIR)-$(OBJDIR)
 objdir_absent = $(OBJDIR)-
 
-_OBJ = stopwatch.o progtimer.o 
+_OBJ = stopwatch.o main.o 
 
 PROGNAME :=
 ifeq ($(OS),Windows_NT)
-	PROGNAME += progtimer.exe
+	PROGNAME += timerprog.exe
 else
-	PROGNAME += progtimer
+	PROGNAME += timerprog
 endif
 
 all: | $(objdir_tgt) $(_OBJ) $(PROGNAME) 
@@ -33,15 +33,15 @@ $(PROGNAME): $(patsubst %,$(OBJDIR)/%,$(_OBJ))
 	@echo "Building programme:$(PROGNAME)"
 	@$(CXX) -o $@ $^
 
-stopwatch.o: $(BASECOMMONPATH)/timer/timer.cpp $(BASECOMMONPATH)/timer/timer.h
+stopwatch.o: $(BASECOMMONPATH)/timer/stopwatch.cpp $(BASECOMMONPATH)/timer/stopwatch.h
 	@echo "Compiling file: $<"
-	@$(CXX) $(CFLAGS) -c $(BASECOMMONPATH)/timer/timer.cpp
-	@mv timer.o $(OBJDIR)/stopwatch.o
+	@$(CXX) $(CFLAGS) -c $<
+	@mv stopwatch.o $(OBJDIR)/stopwatch.o
 
-progtimer.o: progtimer.cpp
+main.o: timerdev.cpp
 	@echo "Compiling file: $<"
-	@$(CXX) $(CFLAGS) -I$(FRAMEWORKPATH) -c progtimer.cpp
-	@mv progtimer.o $(OBJDIR)/progtimer.o
+	@$(CXX) $(CFLAGS) -I$(FRAMEWORKPATH) -c $<
+	@mv timerdev.o $(OBJDIR)/main.o
 
 .PHONY: clean
 
