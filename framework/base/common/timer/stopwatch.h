@@ -17,6 +17,7 @@
 #include <chrono>
 #define MILLISECS_TIME std::chrono::steady_clock::time_point
 #define MICROSECS_TIME std::chrono::high_resolution_clock::time_point
+#define NANOSECS_TIME  std::chrono::high_resolution_clock::time_point
 
 #elif defined WINTIME_MEASURE
 
@@ -63,7 +64,7 @@ protected:
 class CHighResStopWatch
 {
 public:
-    CHighResStopWatch(bool bstart=true);
+    CHighResStopWatch(bool bactivate=true);
     ~CHighResStopWatch();
 
     void Start();
@@ -85,5 +86,32 @@ protected:
     bool m_Paused;
 };
 /////////////////////////////////////////////////////////////////////////////////////////////
+
+#ifdef STDCHRONOLIB_TIME_MEASURE
+/////////////////////////////////////////////////////////////////////////////////////////////
+// Stopwatch nanoseconds time measure class
+class CNanoStopWatch
+{
+public:
+    CNanoStopWatch(bool bactivate=true);
+    ~CNanoStopWatch();
+    
+    void Start();
+    void Stop();
+    void Reset();
+    
+    bool IsPaused() const;
+    
+    double GetTime();
+    unsigned int GetTicks();
+    
+protected:
+    NANOSECS_TIME m_StartTime;
+    NANOSECS_TIME m_CurrTime;
+    
+    bool m_Paused;
+};
+
+#endif //STDCHRONOLIB_TIME_MEASURE
 
 #endif //__STOPWATCH_H__
