@@ -138,9 +138,9 @@ public:
     unsigned int GetTicks();
 
 protected:
-    LARGE_INTEGER m_StartTime;
-    LARGE_INTEGER m_CurrTime;
-    LARGE_INTEGER m_HighResFreq;
+    __int64 m_StartTime;
+    __int64 m_CurrTime;
+    __int64 m_HighResFreq;
 
     bool m_Paused;
 };
