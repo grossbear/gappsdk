@@ -5,229 +5,72 @@
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "stopwatch.h"
-#include <stdio.h>
-#include <iostream>
 
-#ifdef WINTIME_MEASURE
-#include <MMSystem.h>
-//pragma comment (lib, "winmm.lib")
-#endif //WINTIME_MEASURE
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-#if defined WINTIME_MEASURE
-/////////////////////////////////////////////////////////////////////////////////////////////
-inline unsigned int GetStopWatchTime()
-{
-    return timeGetTime();
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-inline float ConvertClockTimeToFloat(DWORD time_val)
-{
-    return float(time_val) / 1000.0f;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-inline unsigned int ConvertClockTimeToUInt(DWORD time_val)
-{
-    return (unsigned int) time_val;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-// Stop watch time measure class
-CStopWatch::CStopWatch(bool bactivate):
-m_StartTime(0),
-m_CurrTime(0),
-m_Paused(true)
-{
-    timeBeginPeriod(1);
-    
-    Reset();
-    if(bactivate) Start();
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-CStopWatch::~CStopWatch()
-{
-    //--timeEndPeriod(1);
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-void CStopWatch::Start()
-{
-    if(!IsPaused()) return ;
-
-    m_Paused = false;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-void CStopWatch::Stop()
-{
-    if(IsPaused()) return ;
-
-    m_CurrTime = GetStopWatchTime();
-    m_Paused = true;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-void CStopWatch::Reset()
-{
-    m_StartTime = GetStopWatchTime();
-    m_CurrTime = m_StartTime;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-bool CStopWatch::IsPaused() const
-{
-    return m_Paused;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-float CStopWatch::GetTime()
-{
-    if(m_Paused)
-    {
-        DWORD timediff = m_CurrTime - m_StartTime;
-        float ftime = ConvertClockTimeToFloat(timediff);
-        
-        return ftime;
-    }
-    
-    DWORD currtime = GetStopWatchTime();
-    DWORD timediff = currtime - m_StartTime;
-    float ftime = ConvertClockTimeToFloat(timediff);
-    
-    return ftime;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-unsigned int CStopWatch::GetTicks()
-{
-    if(m_Paused)
-    {
-        DWORD timediff = m_CurrTime - m_StartTime;
-        unsigned int uitime = ConvertClockTimeToUInt(timediff);
-        return uitime;
-    }
-    
-    DWORD currtime = GetStopWatchTime();
-    DWORD timediff = currtime - m_StartTime;
-    unsigned int uitime = ConvertClockTimeToUInt(timediff);
-  
-    return uitime;
-}
+// Stopwatch time measure class
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-#elif defined STDCHRONOLIB_TIME_MEASURE
-/////////////////////////////////////////////////////////////////////////////////////////////
-inline std::chrono::steady_clock::time_point GetStopWatchTime()
+inline MILLISECS_TIME GetMilliSecsTime()
 {
+#if defined STDCHRONOLIB_TIME_MEASURE
     return std::chrono::steady_clock::now();
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-// Stop watch time measure class
-CStopWatch::CStopWatch(bool bactivate):
-m_Paused(true)
-{
-    Reset();
-    if(bactivate) Start();
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-CStopWatch::~CStopWatch()
-{
-
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-void CStopWatch::Start()
-{
-    if(!IsPaused()) return ;
-
-    m_Paused = false;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-void CStopWatch::Stop()
-{
-    if(IsPaused()) return ;
-
-    m_CurrTime = GetStopWatchTime();
-    m_Paused = true;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-void CStopWatch::Reset()
-{
-    m_StartTime = GetStopWatchTime();
-    m_CurrTime = m_StartTime;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-bool CStopWatch::IsPaused() const
-{
-    return m_Paused;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-float CStopWatch::GetTime()
-{
-    if(m_Paused)
-    {
-        std::chrono::duration<float> fsec = m_CurrTime - m_StartTime;
-        std::chrono::milliseconds dsec = std::chrono::duration_cast<std::chrono::milliseconds>(fsec);
-        
-        return (float)dsec.count() / 1000.f;
-    }
-    
-    std::chrono::steady_clock::time_point currtime = GetStopWatchTime();
-    std::chrono::duration<float> fsec = currtime - m_StartTime;
-    std::chrono::milliseconds dsec = std::chrono::duration_cast<std::chrono::milliseconds>(fsec);
-    
-    return fsec.count() / 1000.f;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-unsigned int CStopWatch::GetTicks()
-{
-    if(m_Paused)
-    {
-        std::chrono::duration<float> fsec = m_CurrTime - m_StartTime;
-        std::chrono::milliseconds dsec = std::chrono::duration_cast<std::chrono::milliseconds>(fsec);
-        
-        return (unsigned int)dsec.count();
-    }
-    
-    std::chrono::steady_clock::time_point currtime = GetStopWatchTime();
-    std::chrono::duration<float> fsec = currtime - m_StartTime;
-    std::chrono::milliseconds dsec = std::chrono::duration_cast<std::chrono::milliseconds>(fsec);
-    
-    return (unsigned int) fsec.count();
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-#else // Use C time library
-/////////////////////////////////////////////////////////////////////////////////////////////
-inline clock_t GetStopWatchTime()
-{
+#elif defined WINTIME_MEASURE
+    return timeGetTime();
+#else
     return clock();
+#endif
 }
+/////////////////////////////////////////////////////////////////////////////////////////////
+inline float CalcMilliSecsTimeInFloat(MILLISECS_TIME curr_time, MILLISECS_TIME prev_time)
+{
+#if defined STDCHRONOLIB_TIME_MEASURE
+    std::chrono::duration<float> timespan = curr_time - prev_time;
+    std::chrono::milliseconds millisecs = std::chrono::duration_cast<std::chrono::milliseconds>(timespan);
+    return (float)millisecs.count() / 1000.f;
+#elif defined WINTIME_MEASURE
+    MILLISECS_TIME timespan = curr_time - prev_time;
+    return float(timespan) / 1000.0f;
+#else
+    MILLISECS_TIME timespan = curr_time - prev_time;
+    return (float) timespan / CLOCKS_PER_SEC;
+#endif
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
+inline unsigned int CalcMilliSecsTimeInUInt(MILLISECS_TIME curr_time, MILLISECS_TIME prev_time)
+{
+#if defined STDCHRONOLIB_TIME_MEASURE
+    std::chrono::duration<float> timespan = curr_time - prev_time;
+    std::chrono::milliseconds millisecs = std::chrono::duration_cast<std::chrono::milliseconds>(timespan);
+    return (unsigned int) millisecs.count();
+#elif defined WINTIME_MEASURE
+    MILLISECS_TIME timespan = curr_time - prev_time;
+    return (unsigned int) timespan;
+#else
+    MILLISECS_TIME timespan = curr_time - prev_time;
+    return ((unsigned int) timespan) / 1000;
+#endif    
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-inline float ConvertClockTimeToFloat(clock_t time_val)
-{
-    return (float) time_val / CLOCKS_PER_SEC;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-inline unsigned int ConvertClockTimeToUInt(clock_t time_val)
-{
-    return ((unsigned int) time_val) / 1000;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-// Stop watch time measure class
 CStopWatch::CStopWatch(bool bactivate):
-m_StartTime(0),
-m_CurrTime(0),
 m_Paused(true)
 {
+#ifdef WINTIME_MEASURE
+    timeBeginPeriod(1);
+#endif //WINTIME_MEASURE
+    
     Reset();
     if(bactivate) Start();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 CStopWatch::~CStopWatch()
 {
+//#ifdef WINTIME_MEASURE
+    //--timeEndPeriod(1);
+//#endif //WINTIME_MEASURE
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 void CStopWatch::Start()
@@ -241,13 +84,13 @@ void CStopWatch::Stop()
 {
     if(IsPaused()) return ;
 
-    m_CurrTime = GetStopWatchTime();
+    m_CurrTime = GetMilliSecsTime();
     m_Paused = true;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 void CStopWatch::Reset()
 {
-    m_StartTime = GetStopWatchTime();
+    m_StartTime = GetMilliSecsTime();
     m_CurrTime = m_StartTime;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -261,16 +104,12 @@ float CStopWatch::GetTime()
 {
     if(m_Paused)
     {
-        clock_t timediff = m_CurrTime - m_StartTime;
-        float ftime = ConvertClockTimeToFloat(timediff);
-        
+        float ftime = CalcMilliSecsTimeInFloat(m_CurrTime, m_StartTime);
         return ftime;
     }
     
-    clock_t currtime = GetStopWatchTime();
-    clock_t timediff = currtime - m_StartTime;
-    float ftime = ConvertClockTimeToFloat(timediff);
-    
+    MILLISECS_TIME currtime = GetMilliSecsTime();
+    float ftime = CalcMilliSecsTimeInFloat(currtime, m_StartTime);
     return ftime;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -278,44 +117,75 @@ unsigned int CStopWatch::GetTicks()
 {
     if(m_Paused)
     {
-        clock_t timediff = m_CurrTime - m_StartTime;
-        unsigned int uitime = ConvertClockTimeToUInt(timediff);
+        unsigned int uitime = CalcMilliSecsTimeInUInt(m_CurrTime, m_StartTime);
         return uitime;
     }
     
-    clock_t currtime = GetStopWatchTime();
-    clock_t timediff = currtime - m_StartTime;
-    unsigned int uitime = ConvertClockTimeToUInt(timediff);
-  
+    MILLISECS_TIME currtime = GetMilliSecsTime();
+    unsigned int uitime = CalcMilliSecsTimeInUInt(currtime, m_StartTime);
     return uitime;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
-#endif
 
 
-
-
-
-
-#if defined WINTIME_MEASURE
 /////////////////////////////////////////////////////////////////////////////////////////////
-inline __int64 GetMicroSecTime()
+// Stopwatch high res time measure class
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+inline MICROSECS_TIME GetMicroSecsTime()
 {
-    __int64 mstime;
+#if defined STDCHRONOLIB_TIME_MEASURE
+    return std::chrono::high_resolution_clock::now();
+#elif defined WINTIME_MEASURE
+    MICROSECS_TIME mstime;
     QueryPerformanceCounter((LARGE_INTEGER*)&mstime);
     return mstime;
+#else
+    return clock();
+#endif
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////
+inline float CalcMicroSecsTimeInFloat(MICROSECS_TIME curr_time, MICROSECS_TIME prev_time)
+{
+#if defined STDCHRONOLIB_TIME_MEASURE
+    std::chrono::duration<float> timespan = curr_time - prev_time;
+    std::chrono::microseconds microsecs = std::chrono::duration_cast<std::chrono::microseconds>(timespan);
+    return (float)microsecs.count() / 1000000.f;
+#elif defined WINTIME_MEASURE
+    MICROSECS_TIME timespan = curr_time - prev_time;
+    return (float)(double)timespan/(double)m_HighResFreq;
+#else
+    MICROSECS_TIME timespan = curr_time - prev_time;
+    return (float) timespan / CLOCKS_PER_SEC;
+#endif
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
+inline unsigned int CalcMicroSecsTimeInUInt(MICROSECS_TIME curr_time, MICROSECS_TIME prev_time)
+{
+#if defined STDCHRONOLIB_TIME_MEASURE
+    std::chrono::duration<float> timespan = curr_time - prev_time;
+    std::chrono::microseconds microsecs = std::chrono::duration_cast<std::chrono::microseconds>(timespan);
+    return (unsigned int) microsecs.count();
+#elif defined WINTIME_MEASURE
+    MICROSECS_TIME timespan = curr_time - prev_time;
+    return (float)(double)timespan/(double)m_HighResFreq*1000000.0;
+#else
+    MILLISECS_TIME timespan = curr_time - prev_time;
+    return (unsigned int) timespan;
+#endif    
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-// Stop watch time measure class
 CHighResStopWatch::CHighResStopWatch(bool bactivate):
-m_StartTime(0),
-m_CurrTime(0),
 m_Paused(true)
 {
+#ifdef WINTIME_MEASURE
     QueryPerformanceFrequency((LARGE_INTEGER*)&m_HighResFreq);
-    
+#endif //WINTIME_MEASURE
+
     Reset();
     if(bactivate) Start();
 }
@@ -335,13 +205,13 @@ void CHighResStopWatch::Stop()
 {
     if(IsPaused()) return ;
 
-    m_CurrTime = GetMicroSecTime();
+    m_CurrTime = GetMicroSecsTime();
     m_Paused = true;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 void CHighResStopWatch::Reset()
 {
-    m_StartTime = GetMicroSecTime();
+    m_StartTime = GetMicroSecsTime();
     m_CurrTime = m_StartTime;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -355,215 +225,25 @@ float CHighResStopWatch::GetTime()
 {
     if(m_Paused)
     {        
-        __int64 timediff = m_CurrTime - m_StartTime;
-        float ftime = (float)(double)timediff/(double)m_HighResFreq; //*1000000.0
-        
+        float ftime = CalcMicroSecsTimeInFloat(m_CurrTime, m_StartTime);     
         return ftime;
     }
     
-    __int64 currtime = GetMicroSecTime();
-    __int64 timediff = currtime - m_StartTime;
-    float ftime = (float)(double)timediff/(double)m_HighResFreq;
-    
+    MICROSECS_TIME currtime = GetMicroSecsTime();
+    float ftime = CalcMicroSecsTimeInFloat(currtime, m_StartTime);
     return ftime;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 unsigned int CHighResStopWatch::GetTicks()
 {
     if(m_Paused)
-    {
-        __int64 timediff = m_CurrTime - m_StartTime;
-        float ftime = (float)(double)timediff/(double)m_HighResFreq*1000000.0;
-        unsigned int uitime = (unsigned int) ftime;
-        
+    {        
+        unsigned int uitime = CalcMicroSecsTimeInUInt(m_CurrTime, m_StartTime);
         return uitime;
     }
     
-    __int64 currtime = GetMicroSecTime();
-    __int64 timediff = currtime - m_StartTime;
-    float ftime = (float)(double)timediff/(double)m_HighResFreq*1000000.0;
-    unsigned int uitime = (unsigned int) ftime;
-  
+    MICROSECS_TIME currtime = GetMicroSecsTime();
+    unsigned int uitime = CalcMicroSecsTimeInUInt(currtime, m_StartTime);
     return uitime;
 }
-
 /////////////////////////////////////////////////////////////////////////////////////////////
-#elif defined STDCHRONOLIB_TIME_MEASURE
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-inline std::chrono::high_resolution_clock::time_point GetMicroSecTime()
-{
-    return std::chrono::high_resolution_clock::now();
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-// Stop watch time measure class
-CHighResStopWatch::CHighResStopWatch(bool bactivate):
-m_Paused(true)
-{
-    Reset();
-    if(bactivate) Start();
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-CHighResStopWatch::~CHighResStopWatch()
-{
-
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-void CHighResStopWatch::Start()
-{
-    if(!IsPaused()) return ;
-
-    m_Paused = false;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-void CHighResStopWatch::Stop()
-{
-    if(IsPaused()) return ;
-
-    m_CurrTime = GetMicroSecTime();
-    m_Paused = true;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-void CHighResStopWatch::Reset()
-{
-    m_StartTime = GetMicroSecTime();
-    m_CurrTime = m_StartTime;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-bool CHighResStopWatch::IsPaused() const
-{
-    return m_Paused;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-float CHighResStopWatch::GetTime()
-{
-    if(m_Paused)
-    {
-        std::chrono::duration<float> fsec = m_CurrTime - m_StartTime;
-        std::chrono::microseconds dsec = std::chrono::duration_cast<std::chrono::microseconds>(fsec);
-        
-        return (float)dsec.count() / 1000000.f;
-    }
-    
-    std::chrono::high_resolution_clock::time_point currtime = GetMicroSecTime();
-    std::chrono::duration<float> fsec = currtime - m_StartTime;
-    std::chrono::microseconds dsec = std::chrono::duration_cast<std::chrono::microseconds>(fsec);
-    
-    return fsec.count() / 1000000.f;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-unsigned int CHighResStopWatch::GetTicks()
-{
-    if(m_Paused)
-    {
-        std::chrono::duration<float> fsec = m_CurrTime - m_StartTime;
-        std::chrono::microseconds dsec = std::chrono::duration_cast<std::chrono::microseconds>(fsec);
-        
-        return (unsigned int)dsec.count();
-    }
-    
-    std::chrono::high_resolution_clock::time_point currtime = GetMicroSecTime();
-    std::chrono::duration<float> fsec = currtime - m_StartTime;
-    std::chrono::microseconds dsec = std::chrono::duration_cast<std::chrono::microseconds>(fsec);
-    
-    return (unsigned int) fsec.count();
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-#else // Use C time library
-/////////////////////////////////////////////////////////////////////////////////////////////
-inline clock_t GetMicroSecTime()
-{
-    return clock();
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-inline float ConvertMicroSecsToFloat(clock_t time_val)
-{
-    return (float) time_val / CLOCKS_PER_SEC;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-inline unsigned int ConvertMicroSecsToUInt(clock_t time_val)
-{
-    return (unsigned int) time_val;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-CHighResStopWatch::CHighResStopWatch(bool bactivate):
-m_StartTime(0),
-m_CurrTime(0),
-m_Paused(true)
-{
-    Reset();
-    if(bactivate) Start();
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-CHighResStopWatch::~CHighResStopWatch()
-{
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-void CHighResStopWatch::Start()
-{
-    if(!IsPaused()) return ;
-
-    m_Paused = false;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-void CHighResStopWatch::Stop()
-{
-    if(IsPaused()) return ;
-
-    m_CurrTime = GetMicroSecTime();
-    m_Paused = true;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-void CHighResStopWatch::Reset()
-{
-    m_StartTime = GetMicroSecTime();
-    m_CurrTime = m_StartTime;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-bool CHighResStopWatch::IsPaused() const
-{
-    return m_Paused;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-float CHighResStopWatch::GetTime()
-{
-    if(m_Paused)
-    {
-        clock_t timediff = m_CurrTime - m_StartTime;
-        float ftime = ConvertMicroSecsToFloat(timediff);
-        
-        return ftime;
-    }
-    
-    clock_t currtime = GetMicroSecTime();
-    clock_t timediff = currtime - m_StartTime;
-    float ftime = ConvertMicroSecsToFloat(timediff);
-    
-    return ftime;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-unsigned int CHighResStopWatch::GetTicks()
-{
-    if(m_Paused)
-    {
-        clock_t timediff = m_CurrTime - m_StartTime;
-        unsigned int uitime = ConvertMicroSecsToUInt(timediff);
-        return uitime;
-    }
-    
-    clock_t currtime = GetMicroSecTime();
-    clock_t timediff = currtime - m_StartTime;
-    unsigned int uitime = ConvertMicroSecsToUInt(timediff);
-  
-    return uitime;
-}
-#endif
-
