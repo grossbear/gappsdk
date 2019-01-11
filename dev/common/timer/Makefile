@@ -13,8 +13,10 @@ objdir_absent = $(OBJDIR)-
 _OBJ = stopwatch.o main.o 
 
 PROGNAME :=
+LINKLIB :=
 ifeq ($(OS),Windows_NT)
 	PROGNAME += timerprog.exe
+	LINKLIB += -lwinmm
 else
 	PROGNAME += timerprog
 endif
@@ -29,9 +31,11 @@ $(objdir_absent):
 	@echo "Creating directory '$(OBJDIR)'."
 	@mkdir -p $(OBJDIR)
 
+
 $(PROGNAME): $(patsubst %,$(OBJDIR)/%,$(_OBJ))
 	@echo "Building programme:$(PROGNAME)"
-	@$(CXX) -o $@ $^
+	@$(CXX) -o $@ $^ $(LINKLIB)
+
 
 stopwatch.o: $(BASECOMMONPATH)/timer/stopwatch.cpp $(BASECOMMONPATH)/timer/stopwatch.h
 	@echo "Compiling file: $<"

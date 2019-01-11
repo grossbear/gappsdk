@@ -10,7 +10,7 @@
 
 #ifdef WINTIME_MEASURE
 #include <MMSystem.h>
-#pragma comment (lib, "winmm.lib")
+//pragma comment (lib, "winmm.lib")
 #endif //WINTIME_MEASURE
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,7 +47,7 @@ m_Paused(true)
 /////////////////////////////////////////////////////////////////////////////////////////////
 CStopWatch::~CStopWatch()
 {
-    timeEndPeriod(1);
+    //--timeEndPeriod(1);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 void CStopWatch::Start()
@@ -299,23 +299,13 @@ unsigned int CStopWatch::GetTicks()
 
 #if defined WINTIME_MEASURE
 /////////////////////////////////////////////////////////////////////////////////////////////
-inline unsigned int GetMicroSecTime()
+inline __int64 GetMicroSecTime()
 {
-    LARGE_INTEGER mstime;
-    QueryPerformanceCounter(&mstime);
+    __int64 mstime;
+    QueryPerformanceCounter((LARGE_INTEGER*)&mstime);
     return mstime;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-inline float ConvertMicroSecsToFloat(LARGE_INTEGER time_val)
-{
-    return float(time_val) / 1000000.f;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-inline unsigned int ConvertMicroSecsToUInt(LARGE_INTEGER time_val)
-{
-    return (unsigned int) time_val;
-}
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // Stop watch time measure class
@@ -365,15 +355,15 @@ float CHighResStopWatch::GetTime()
 {
     if(m_Paused)
     {        
-        LARGE_INTEGER timediff = m_CurrTime - m_StartTime;
-        float ftime = (float)(double)timediff/(double)m_HighResFreq*1000000.0;
+        __int64 timediff = m_CurrTime - m_StartTime;
+        float ftime = (float)(double)timediff/(double)m_HighResFreq; //*1000000.0
         
         return ftime;
     }
     
-    LARGE_INTEGER currtime = GetMicroSecTime();
-    LARGE_INTEGER timediff = currtime - m_StartTime;
-    float ftime = (float)(double)timediff/(double)m_HighResFreq*1000000.0;
+    __int64 currtime = GetMicroSecTime();
+    __int64 timediff = currtime - m_StartTime;
+    float ftime = (float)(double)timediff/(double)m_HighResFreq;
     
     return ftime;
 }
@@ -382,15 +372,15 @@ unsigned int CHighResStopWatch::GetTicks()
 {
     if(m_Paused)
     {
-        LARGE_INTEGER timediff = m_CurrTime - m_StartTime;
+        __int64 timediff = m_CurrTime - m_StartTime;
         float ftime = (float)(double)timediff/(double)m_HighResFreq*1000000.0;
         unsigned int uitime = (unsigned int) ftime;
         
         return uitime;
     }
     
-    LARGE_INTEGER currtime = GetMicroSecTime();
-    LARGE_INTEGER timediff = currtime - m_StartTime;
+    __int64 currtime = GetMicroSecTime();
+    __int64 timediff = currtime - m_StartTime;
     float ftime = (float)(double)timediff/(double)m_HighResFreq*1000000.0;
     unsigned int uitime = (unsigned int) ftime;
   
