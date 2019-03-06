@@ -32,32 +32,32 @@
 
 const INTFLOAT sinus_tab [TABLESIZE_SIN] = 
 {
-    #include "Tables/sin_table256.h"
+    #include "tables/sin_table256.h"
 };
 ///////////////////////////////////////////////////////////////////////////////////////
 const uint32t fxcos_tab [FIXED_TABLE_SIZE+1] = 
 {
-    #include "Tables/fxcos_table1024.h"
+    #include "tables/fxcos_table1024.h"
 };
 ///////////////////////////////////////////////////////////////////////////////////////
 const uint32t fxsin_tab [FIXED_TABLE_SIZE+1] =
 {
-    #include "Tables/fxsin_table1024.h"
+    #include "tables/fxsin_table1024.h"
 };
 ///////////////////////////////////////////////////////////////////////////////////////
 const uint32t fxtan_tab [FIXED_TABLE_SIZE+1] =
 {
-    #include "Tables/fxtan_table1024.h"
+    #include "tables/fxtan_table1024.h"
 };
 ///////////////////////////////////////////////////////////////////////////////////////
 const uint32t fxacos_tab [FIXED_TABLE_SIZE+1] =
 {
-    #include "Tables/fxacos_table1024.h"
+    #include "tables/fxacos_table1024.h"
 };
 ///////////////////////////////////////////////////////////////////////////////////////
 const ubyte acosdeg_tab [101] = 
 {
-    #include "Tables/acosdeg_table.h"
+    #include "tables/acosdeg_table.h"
 };
 ///////////////////////////////////////////////////////////////////////////////////////
 static const INTFLOAT bias = {((23 + 127) << 23) + (1 << 22)};
