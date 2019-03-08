@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////
 //
 //  File:     algebraelemfunc.inl
-//  Content:  Inline elementary functions used In algebra classes  
+//  Content:  Inline elementary functions used in algebra classes  
 //
 ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -12,11 +12,11 @@
 // Vec2 
 M_FORCEINL float MVEC2SQRT(float x)
 {
-#ifdef CMATH_VEC2_TABLE_SQRT
+#ifdef CMATH_VEC2_FLOAT_TABLE_SQRT
     return m_tsqrt(x);
-#elif defined(CMATH_VEC2_FAST_SQRT)
+#elif defined (CMATH_VEC2_FAST_FLOAT_SQRT)
     return m_fsqrt(x);
-#elif defined(CMATH_VEC2_HIGH_PREC_FLOAT_SQRT)
+#elif defined (CMATH_VEC2_HIGH_PREC_FLOAT_SQRT)
     return (float)msqrt((double)x);
 #else
     return msqrt(x);
@@ -30,11 +30,11 @@ M_FORCEINL double MVEC2SQRT(double x)
 
 M_FORCEINL float MVEC2SQRT(float x, float y)
 {
-#ifdef CMATH_VEC2_TABLE_SQRT
+#ifdef CMATH_VEC2_FLOAT_TABLE_SQRT
     return m_tsqrt(x*x + y*y);
-#elif defined(CMATH_VEC2_FAST_SQRT)
+#elif defined (CMATH_VEC2_FAST_FLOAT_SQRT)
     return m_fsqrt(x*x + y*y);
-#elif defined(CMATH_VEC2_HIGH_PREC_FLOAT_SQRT)
+#elif defined (CMATH_VEC2_HIGH_PREC_FLOAT_SQRT)
     return (float)msqrt(double(x)*double(x) + double(y)*double(y));
 #else 
     return msqrt(x*x + y*y);
@@ -50,9 +50,9 @@ M_FORCEINL float MVEC2REVSQRT(float x, float y)
 {
     ASSERT((x*x + y*y) > FLOAT_EPS);
 
-#ifdef CMATH_VEC2_TABLE_SQRT
+#ifdef CMATH_VEC2_FLOAT_TABLE_SQRT
     return m_rtsqrt(x*x + y*y);
-#elif defined(CMATH_VEC2_FAST_SQRT)
+#elif defined(CMATH_VEC2_FAST_FLOAT_SQRT)
     return m_rfsqrt(x*x + y*y);
 #elif defined(CMATH_VEC2_HIGH_PREC_FLOAT_SQRT)
     return (float)(1.0/msqrt(double(x)*double(x) + double(y)*double(y)));
@@ -71,8 +71,13 @@ M_FORCEINL double MVEC2REVSQRT(double x, double y)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL void MVEC2SINCOS(float angle, float &sina, float &cosa)
 {
-#ifdef CMATH_VEC2_TABLE_TRIGONOMETRY
+#ifdef CMATH_VEC2_FLOAT_TABLE_TRIGONOMETRY
     m_tsincosf(angle,sina,cosa);
+#elif defined (MATH_VEC2_HIGH_PREC_FLOAT_TRIGONOMETRY)
+    double dsina, dcosa;
+    msincos((double)angle,dsina,dcosa);
+    sina = (float)dsina;
+    cosa = (float)dcosa;
 #else
     msincos(angle,sina,cosa);
 #endif
@@ -86,8 +91,10 @@ M_FORCEINL void MVEC2SINCOS(double angle, double &sina, double &cosa)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MVEC2COS(float angle)
 {
-#ifdef CMATH_VEC2_TABLE_TRIGONOMETRY
+#ifdef CMATH_VEC2_FLOAT_TABLE_TRIGONOMETRY
     return m_tcosf(angle);
+#elif defined (CMATH_VEC2_HIGH_PREC_FLOAT_TRIGONOMETRY)
+    return (float)mcos((double)angle);
 #else
     return mcos(angle);
 #endif
@@ -101,7 +108,11 @@ M_FORCEINL double MVEC2COS(double angle)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MVEC2ACOS(float x)
 {
+#ifdef CMATH_VEC2_HIGH_PREC_FLOAT_TRIGONOMETRY
+    return (float)macos((double)x);
+#else
     return macos(x);
+#endif
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL double MVEC2ACOS(double x)
@@ -113,9 +124,9 @@ M_FORCEINL double MVEC2ACOS(double x)
 // Vec3 
 M_FORCEINL float MVEC3SQRT(float x)
 {
-#ifdef CMATH_VEC3_TABLE_SQRT
+#ifdef CMATH_VEC3_FLOAT_TABLE_SQRT
     return m_tsqrt(x);
-#elif defined(CMATH_VEC3_FAST_SQRT)
+#elif defined(CMATH_VEC3_FAST_FLOAT_SQRT)
     return m_fsqrt(x);
 #elif defined(CMATH_VEC3_HIGH_PREC_FLOAT_SQRT)
     return (float)msqrt((double)x);
@@ -131,9 +142,9 @@ M_FORCEINL double MVEC3SQRT(double x)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MVEC3SQRT(float x, float y, float z)
 {
-#ifdef CMATH_VEC3_TABLE_SQRT
+#ifdef CMATH_VEC3_FLOAT_TABLE_SQRT
     return m_tsqrt(x*x + y*y + z*z);
-#elif defined(CMATH_VEC3_FAST_SQRT)
+#elif defined(CMATH_VEC3_FAST_FLOAT_SQRT)
     return m_fsqrt(x*x + y*y + z*z);
 #elif defined(CMATH_VEC3_HIGH_PREC_FLOAT_SQRT)
     double xd(x),yd(y),zd(z);
@@ -152,9 +163,9 @@ M_FORCEINL float MVEC3REVSQRT(float x, float y, float z)
 {
     ASSERT((x*x + y*y + z*z) > FLOAT_EPS);
 
-#ifdef CMATH_VEC3_TABLE_SQRT
+#ifdef CMATH_VEC3_FLOAT_TABLE_SQRT
     return m_rtsqrt(x*x + y*y + z*z);
-#elif defined(CMATH_VEC3_FAST_SQRT)
+#elif defined(CMATH_VEC3_FAST_FLOAT_SQRT)
     return m_rfsqrt(x*x + y*y + z*z);
 #elif defined(CMATH_VEC3_HIGH_PREC_FLOAT_SQRT)
     double xd(x),yd(y),zd(z);
@@ -174,8 +185,13 @@ M_FORCEINL double MVEC3REVSQRT(double x, double y, double z)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL void MVEC3SINCOS(float angle, float &sina, float &cosa)
 {
-#ifdef CMATH_VEC3_TABLE_TRIGONOMETRY
+#ifdef CMATH_VEC3_FLOAT_TABLE_TRIGONOMETRY
     m_tsincosf(angle,sina,cosa);
+#elif defined (CMATH_VEC3_HIGH_PREC_FLOAT_TRIGONOMETRY)
+    double dsina,dcosa;
+    msincos((double)angle,dsina,dcosa);
+    sina = (float)dsina;
+    cosa = (float)dcosa;
 #else
     msincos(angle,sina,cosa);
 #endif
@@ -189,8 +205,10 @@ M_FORCEINL void MVEC3SINCOS(double angle, double &sina, double &cosa)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MVEC3COS(float angle)
 {
-#ifdef CMATH_VEC3_TABLE_TRIGONOMETRY
+#ifdef CMATH_VEC3_FLOAT_TABLE_TRIGONOMETRY
     return m_tcosf(angle);
+#elif defined (CMATH_VEC3_HIGH_PREC_FLOAT_TRIGONOMETRY)
+    return (float)mcos((double)angle);
 #else
     return mcos(angle);
 #endif
@@ -204,7 +222,11 @@ M_FORCEINL double MVEC3COS(double angle)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MVEC3ACOS(float x)
 {
+#ifdef CMATH_VEC3_HIGH_PREC_FLOAT_TRIGONOMETRY
+    return (float)macos((double)x);
+#else
     return macos(x);
+#endif
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL double MVEC3ACOS(double x)
@@ -217,9 +239,9 @@ M_FORCEINL double MVEC3ACOS(double x)
 // Vec4 
 M_FORCEINL float MVEC4SQRT(float x)
 {
-#ifdef CMATH_VEC4_TABLE_SQRT
+#ifdef CMATH_VEC4_FLOAT_TABLE_SQRT
     return m_tsqrt(x);
-#elif defined(CMATH_VEC4_FAST_SQRT)
+#elif defined(CMATH_VEC4_FAST_FLOAT_SQRT)
     return m_fsqrt(x);
 #elif defined(CMATH_VEC4_HIGH_PREC_FLOAT_SQRT)
     return (float)msqrt((double)x);
@@ -235,9 +257,9 @@ M_FORCEINL double MVEC4SQRT(double x)
 
 M_FORCEINL float MVEC4SQRT(float x, float y, float z, float w)
 {
-#ifdef CMATH_VEC4_TABLE_SQRT
+#ifdef CMATH_VEC4_FLOAT_TABLE_SQRT
     return m_tsqrt(x*x + y*y + z*z + w*w);
-#elif defined(CMATH_VEC4_FAST_SQRT)
+#elif defined(CMATH_VEC4_FAST_FLOAT_SQRT)
     return m_fsqrt(x*x + y*y + z*z + w*w);
 #elif defined(CMATH_VEC4_HIGH_PREC_FLOAT_SQRT)
     double xd(x),yd(y),zd(z),wd(w);
@@ -256,9 +278,9 @@ M_FORCEINL float MVEC4REVSQRT(float x, float y, float z, float w)
 {
     ASSERT((x*x + y*y + z*z + w*w) > FLOAT_EPS);
 
-#ifdef CMATH_VEC4_TABLE_SQRT
+#ifdef CMATH_VEC4_FLOAT_TABLE_SQRT
     return m_rtsqrt(x*x + y*y + z*z + w*w);
-#elif defined(CMATH_VEC4_FAST_SQRT)
+#elif defined(CMATH_VEC4_FAST_FLOAT_SQRT)
     return m_rfsqrt(x*x + y*y + z*z + w*w);
 #elif defined(CMATH_VEC4_HIGH_PREC_FLOAT_SQRT)
     double xd(x),yd(y),zd(z),wd(w);
@@ -278,8 +300,13 @@ M_FORCEINL double MVEC4REVSQRT(double x, double y, double z, double w)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL void MVEC4SINCOS(float angle, float &sina, float &cosa)
 {
-#ifdef CMATH_VEC4_TABLE_TRIGONOMETRY
+#ifdef CMATH_VEC4_FLOAT_TABLE_TRIGONOMETRY
     m_tsincosf(angle,sina,cosa);
+#elif defined (CMATH_VEC4_HIGH_PREC_FLOAT_TRIGONOMETRY)
+    double dsina, dcosa;
+    msincos((double)angle,dsina,dcosa);
+    sina = (float)dsina;
+    cosa = (float)dcosa;
 #else
     msincos(angle,sina,cosa);
 #endif
@@ -293,8 +320,10 @@ M_FORCEINL void MVEC4SINCOS(double angle, double &sina, double &cosa)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MVEC4COS(float angle)
 {
-#ifdef CMATH_VEC4_TABLE_TRIGONOMETRY
+#ifdef CMATH_VEC4_FLOAT_TABLE_TRIGONOMETRY
     return m_tcosf(angle);
+#elif defined (CMATH_VEC4_HIGH_PREC_FLOAT_TRIGONOMETRY)
+    return (float)mcos((double)angle);
 #else
     return mcos(angle);
 #endif
@@ -308,7 +337,11 @@ M_FORCEINL double MVEC4COS(double angle)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MVEC4ACOS(float x)
 {
+#ifdef CMATH_VEC4_HIGH_PREC_FLOAT_TRIGONOMETRY
+    return (float)macos((double)x);
+#else
     return macos(x);
+#endif
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL double MVEC4ACOS(double x)
@@ -320,10 +353,13 @@ M_FORCEINL double MVEC4ACOS(double x)
 // Plane
 M_FORCEINL float MPLANESQRT(float a, float b, float c)
 {
-#ifdef CMATH_PLANE_TABLE_SQRT
+#ifdef CMATH_PLANE_FLOAT_TABLE_SQRT
     return m_tsqrt(a*a + b*b + c*c);
-#elif CMATH_PLANE_FAST_SQRT
+#elif defined (CMATH_PLANE_FAST_FLOAT_SQRT)
     return m_fsqrt(a*a + b*b + c*c);
+#elif defined (CMATH_PLANE_HIGH_PREC_FLOAT_SQRT)
+    double ad(a), bd(b), cd(c);
+    return (float)msqrt((double)(ad*ad + bd*bd + cd*cd));
 #else
     return msqrt(a*a + b*b + c*c);
 #endif
@@ -337,10 +373,13 @@ M_FORCEINL double MPLANESQRT(double a, double b, double c)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MPLANEREVSQRT(float a, float b, float c)
 {
-#ifdef CMATH_PLANE_TABLE_SQRT
+#ifdef CMATH_PLANE_FLOAT_TABLE_SQRT
     return m_rtsqrt(a*a + b*b + c*c);
-#elif defined(CMATH_PLANE_FAST_SQRT)
+#elif defined(CMATH_PLANE_FAST_FLOAT_SQRT)
     return m_rfsqrt(a*a + b*b + c*c);
+#elif defined(CMATH_PLANE_HIGH_PREC_FLOAT_SQRT)
+    double ad(a), bd(b), cd(c);
+    return (float)(1.0/msqrt(ad*ad + bd*bd + cd*cd));
 #else
     return 1.0f/msqrt(a*a + b*b + c*c);
 #endif
@@ -358,8 +397,13 @@ M_FORCEINL double MPLANEREVSQRT(double a, double b, double c)
 // Matrix3x3
 M_FORCEINL void MMTX33SINCOS(float angle, float &sina, float &cosa)
 {
-#ifdef CMATH_MTX33_TABLE_TRIGONOMETRY
+#ifdef CMATH_MTX33_FLOAT_TABLE_TRIGONOMETRY
     m_tsincosf(angle,sina,cosa);
+#elif defined (CMATH_MTX33_HIGH_PREC_FLOAT_TRIGONOMETRY)
+    double dsina, dcosa;
+    msincos((double)angle,dsina,dcosa);
+    sina = (float)dsina;
+    cosa = (float)dcosa;
 #else
     msincos(angle,sina,cosa);
 #endif
@@ -373,10 +417,13 @@ M_FORCEINL void MMTX33SINCOS(double angle, double &sina, double &cosa)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MMTX33SQRT(float x, float y, float z)
 {
-#ifdef CMATH_MTX33_TABLE_SQRT
+#ifdef CMATH_MTX33_FLOAT_TABLE_SQRT
     return m_tsqrt(x*x + y*y + z*z);
-#elif defined(CMATH_MTX33_FAST_SQRT)
+#elif defined(CMATH_MTX33_FAST_FLOAT_SQRT)
     return m_fsqrt(x*x + y*y + z*z);
+#elif defined(CMATH_MTX33_HIGH_PREC_FLOAT_SQRT)
+    double xd(x), yd(y), zd(z);
+    return (float)msqrt(xd*xd + yd*yd + zd*zd);
 #else
     return msqrt(x*x + y*y + z*z);
 #endif 
@@ -390,7 +437,11 @@ M_FORCEINL double MMTX33SQRT(double x, double y, double z)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MMTX33ASIN(float x)
 {
+#ifdef CMATH_MTX33_HIGH_PREC_FLOAT_TRIGONOMETRY
+    return (float)masin((double)x);
+#else
     return masin(x);
+#endif
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL double MMTX33ASIN(double x)
@@ -401,7 +452,11 @@ M_FORCEINL double MMTX33ASIN(double x)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MMTX33ATAN2(float y, float x)
 {
+#ifdef CMATH_MTX33_HIGH_PREC_FLOAT_TRIGONOMETRY
+    return (float)matan2((double)y,(double)x);
+#else
     return matan2(y,x);
+#endif
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL double MMTX33ATAN2(double y, double x)
@@ -413,8 +468,13 @@ M_FORCEINL double MMTX33ATAN2(double y, double x)
 // Matrix4x4
 M_FORCEINL void MMTX44SINCOS(float angle, float &sina, float &cosa)
 {
-#ifdef CMATH_MTX44_TABLE_TRIGONOMETRY
+#ifdef CMATH_MTX44_FLOAT_TABLE_TRIGONOMETRY
     m_tsincosf(angle,sina,cosa);
+#elif defined (CMATH_MTX44_HIGH_PREC_FLOAT_TRIGONOMETRY)
+    double dsina, dcosa;
+    msincos((double)angle,dsina,dcosa);
+    sina = (float)dsina;
+    cosa = (float)dcosa;
 #else
     msincos(angle,sina,cosa);
 #endif
@@ -428,10 +488,13 @@ M_FORCEINL void MMTX44SINCOS(double angle, double &sina, double &cosa)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MMTX44SQRT(float x, float y, float z)
 {
-#ifdef CMATH_MTX44_TABLE_SQRT
+#ifdef CMATH_MTX44_FLOAT_TABLE_SQRT
     return m_tsqrt(x*x + y*y + z*z);
-#elif defined(CMATH_MTX44_FAST_SQRT)
+#elif defined(CMATH_MTX44_FAST_FLOAT_SQRT)
     return m_fsqrt(x*x + y*y + z*z);
+#elif defined(CMATH_MTX44_HIGH_PREC_FLOAT_SQRT)
+    double xd(x), yd(y), zd(z);
+    return (float)msqrt(xd*xd + yd*yd + zd*zd);
 #else
     return msqrt(x*x + y*y + z*z);
 #endif 
@@ -445,7 +508,11 @@ M_FORCEINL double MMTX44SQRT(double x, double y, double z)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MMTX44ASIN(float x)
 {
+#ifdef CMATH_MTX44_HIGH_PREC_FLOAT_TRIGONOMETRY
+    return (float)masin((double)x);
+#else
     return masin(x);
+#endif
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL double MMTX44ASIN(double x)
@@ -456,7 +523,11 @@ M_FORCEINL double MMTX44ASIN(double x)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MMTX44ATAN2(float y, float x)
 {
+#ifdef CMATH_MTX44_HIGH_PREC_FLOAT_TRIGONOMETRY
+    return (float)matan2((double)y,(double)x);
+#else
     return matan2(y,x);
+#endif
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL double MMTX44ATAN2(double y, double x)
@@ -468,8 +539,13 @@ M_FORCEINL double MMTX44ATAN2(double y, double x)
 // Quaternion
 M_FORCEINL void MQUATSINCOS(float angle, float &sina, float &cosa)
 {
-#ifdef CMATH_QUAT_TABLE_TRIGONOMETRY
+#ifdef CMATH_QUAT_FLOAT_TABLE_TRIGONOMETRY
     m_tsincosf(angle,sina,cosa);
+#elif defined (CMATH_QUAT_HIGH_PREC_FLOAT_TRIGONOMETRY)
+    double dsina, dcosa;
+    msincos((double)angle,dsina,dcosa);
+    sina = (float)dsina;
+    cosa = (float)dcosa;
 #else
     msincos(angle,sina,cosa);
 #endif
@@ -483,7 +559,11 @@ M_FORCEINL void MQUATSINCOS(double angle, double &sina, double &cosa)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MQUATATAN2(float y, float x)
 {
+#ifdef CMATH_QUAT_HIGH_PREC_FLOAT_TRIGONOMETRY
+    return (float)matan2((double)y,(double)x);
+#else
     return matan2(y,x);
+#endif
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL double MQUATATAN2(double y, double x)
@@ -494,7 +574,11 @@ M_FORCEINL double MQUATATAN2(double y, double x)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MQUATATAN(float x)
 {
+#ifdef CMATH_QUAT_HIGH_PREC_FLOAT_TRIGONOMETRY
+    return (float)matan((double)x);
+#else
     return matan(x);
+#endif
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL double MQUATATAN(double x)
@@ -505,8 +589,10 @@ M_FORCEINL double MQUATATAN(double x)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MQUATSIN(float x)
 {
-#ifdef CMATH_QUAT_TABLE_TRIGONOMETRY
+#ifdef CMATH_QUAT_FLOAT_TABLE_TRIGONOMETRY
     return m_tsinf(x);
+#elif defined (CMATH_QUAT_HIGH_PREC_FLOAT_TRIGONOMETRY)
+    return (float)msin((double)x);
 #else
     return msin(x);
 #endif
@@ -520,7 +606,11 @@ M_FORCEINL double MQUATSIN(double x)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MQUATASIN(float x)
 {
+#ifdef CMATH_QUAT_HIGH_PREC_FLOAT_TRIGONOMETRY
+    return (float)msin((double)x);
+#else
     return msin(x);
+#endif
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL double MQUATASIN(double x)
@@ -531,7 +621,11 @@ M_FORCEINL double MQUATASIN(double x)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MQUATACOS(float x)
 {
+#ifdef CMATH_QUAT_HIGH_PREC_FLOAT_TRIGONOMETRY
+    return (float)macos((double)x);
+#else
     return macos(x);
+#endif
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL double MQUATACOS(double x)
@@ -542,10 +636,13 @@ M_FORCEINL double MQUATACOS(double x)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MQUATSQRT(float x, float y, float z, float w)
 {
-#ifdef CMATH_QUAT_FAST_SQRT
+#ifdef CMATH_QUAT_FAST_FLOAT_SQRT
     return m_fsqrt(x*x + y*y + z*z + w*w);
-#elif defined(CMATH_QUAT_TABLE_SQRT)
+#elif defined(CMATH_QUAT_FLOAT_TABLE_SQRT)
     return m_tsqrt(x*x + y*y + z*z + w*w);
+#elif defined(CMATH_QUAT_HIGH_PREC_FLOAT_SQRT)
+    double xd(x), yd(y), zd(z), wd(w);
+    return (float)msqrt(xd*xd + yd*yd + zd*zd + wd*wd);
 #else
     return msqrt(x*x + y*y + z*z + w*w);
 #endif
@@ -559,10 +656,13 @@ M_FORCEINL double MQUATSQRT(double x, double y, double z, double w)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MQUATSQRT(float x, float y, float z)
 {
-#ifdef CMATH_QUAT_FAST_SQRT
+#ifdef CMATH_QUAT_FAST_FLOAT_SQRT
     return m_fsqrt(x*x + y*y + z*z);
-#elif defined(CMATH_QUAT_TABLE_SQRT)
+#elif defined(CMATH_QUAT_FLOAT_TABLE_SQRT)
     return m_tsqrt(x*x + y*y + z*z);
+#elif defined(CMATH_QUAT_HIGH_PREC_FLOAT_SQRT)
+    double xd(x), yd(y), zd(z);
+    return (float)msqrt(xd*xd + yd*yd + zd*zd);
 #else
     return msqrt(x*x + y*y + z*z);
 #endif
@@ -576,10 +676,12 @@ M_FORCEINL double MQUATSQRT(double x, double y, double z)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MQUATSQRT(float x)
 {
-#ifdef CMATH_QUAT_FAST_SQRT
+#ifdef CMATH_QUAT_FAST_FLOAT_SQRT
     return m_fsqrt(x);
-#elif defined(CMATH_QUAT_TABLE_SQRT)
+#elif defined(CMATH_QUAT_FLOAT_TABLE_SQRT)
     return m_tsqrt(x);
+#elif defined(CMATH_QUAT_HIGH_PREC_FLOAT_SQRT)
+    return (float)msqrt(double(x));
 #else
     return msqrt(x);
 #endif
@@ -593,10 +695,13 @@ M_FORCEINL double MQUATSQRT(double x)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MQUATRSQRT(float x, float y, float z, float w)
 {
-#ifdef CMATH_QUAT_FAST_SQRT
+#ifdef CMATH_QUAT_FAST_FLOAT_SQRT
     return m_rfsqrt(x*x + y*y + z*z + w*w);
-#elif defined(CMATH_QUAT_TABLE_SQRT)
+#elif defined(CMATH_QUAT_FLOAT_TABLE_SQRT)
     return 1.0f/m_tsqrt(x*x + y*y + z*z + w*w);
+#elif defined(CMATH_QUAT_HIGH_PREC_FLOAT_SQRT)
+    double xd(x), yd(y), zd(z), wd(w);
+    return (float)(1.0/msqrt(xd*xd + yd*yd + zd*zd + wd*wd));
 #else
     return 1.0f/msqrt(x*x + y*y + z*z + w*w);
 #endif
