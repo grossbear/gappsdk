@@ -3,7 +3,6 @@
 //
 //  Inside library defines compilation functions specification
 //  
-//
 ///////////////////////////////////////////////////////////////////////////////////////
 
 #ifndef _MATH_LIB_DEFINES_H_
@@ -36,38 +35,79 @@
 //#define MATH_FIXED_INST
 //#define MATH_HALF_INST
 
-#ifdef MATH_HIGH_PREC_FLOAT_VEC
-#pragma message "High precision float square root calculation in vectors classes"
+
+///////////////////////////////////////////////////////////////////////////////////////
+// Square root computation precision preprocessor
+///////////////////////////////////////////////////////////////////////////////////////
+// High precision float square root computation
+#if defined (MATH_HIGH_PREC_FLOAT_SQRT)
+//--#pragma message "High precision float square root calculation in algebra classes"
 #define CMATH_VEC2_HIGH_PREC_FLOAT_SQRT
 #define CMATH_VEC3_HIGH_PREC_FLOAT_SQRT
 #define CMATH_VEC4_HIGH_PREC_FLOAT_SQRT
-#endif //MATH_HIGH_PREC_FLOAT_VEC
+#define CMATH_PLANE_HIGH_PREC_FLOAT_SQRT
+#define CMATH_MTX33_HIGH_PREC_FLOAT_SQRT
+#define CMATH_MTX44_HIGH_PREC_FLOAT_SQRT
+#define CMATH_QUAT_HIGH_PREC_FLOAT_SQRT
 
-//#define CMATH_VEC2_FAST_SQRT
-//#define CMATH_VEC2_TABLE_SQRT
-//#define CMATH_VEC2_HIGH_PREC_FLOAT_SQRT
-//#define CMATH_VEC2_TABLE_TRIGONOMETRY
+// Table float square root computation
+#elif defined (MATH_FLOAT_TABLE_SQRT)
+//--#pragma message "Table float square root calculation in algebra classes"
+#define CMATH_VEC2_FLOAT_TABLE_SQRT
+#define CMATH_VEC3_FLOAT_TABLE_SQRT
+#define CMATH_VEC4_FLOAT_TABLE_SQRT
+#define CMATH_MTX33_FLOAT_TABLE_SQRT
+#define CMATH_MTX44_FLOAT_TABLE_SQRT
+#define CMATH_QUAT_FLOAT_TABLE_SQRT
+#define CMATH_PLANE_FLOAT_TABLE_SQRT
 
-//#define CMATH_VEC3_FAST_SQRT
-//#define CMATH_VEC3_TABLE_SQRT
-//#define CMATH_VEC3_HIGH_PREC_FLOAT_SQRT
-//#define CMATH_VEC3_TABLE_TRIGONOMETRY
+// Fast approximationn float square root computation
+#elif defined (MATH_FAST_FLOAT_SQRT)
+//--#pragma message "Approximation float square root calculation in algebra classes"
+#define CMATH_VEC2_FAST_FLOAT_SQRT
+#define CMATH_VEC3_FAST_FLOAT_SQRT
+#define CMATH_VEC4_FAST_FLOAT_SQRT
+#define CMATH_MTX33_FAST_FLOAT_SQRT
+#define CMATH_MTX44_FAST_FLOAT_SQRT
+#define CMATH_QUAT_FAST_FLOAT_SQRT
+#define CMATH_PLANE_FAST_FLOAT_SQRT
 
-//#define CMATH_VEC4_FAST_SQRT
-//#define CMATH_VEC4_TABLE_SQRT
-//#define CMATH_VEC4_HIGH_PREC_FLOAT_SQRT
-//#define CMATH_VEC4_TABLE_TRIGONOMETRY
+// Default float square root computation
+//--#else
+//--#pragma message "Default float square root calculation in algebra classes"
+#endif // Square root computation precision preprocessor
 
-//#define CMATH_MTX33_FAST_SQRT
-//#define CMATH_MTX33_TABLE_SQRT
-//#define CMATH_MTX33_TABLE_TRIGONOMETRY
+///////////////////////////////////////////////////////////////////////////////////////
+// Trigonometry computation precision preprocessor
+///////////////////////////////////////////////////////////////////////////////////////
+// High precision trigonometry computation
+#if defined (MATH_HIGH_PREC_FLOAT_TRIGONOMETRY)
+//--#pragma message "High precision float trigonometry calculation in algebra classes"
 
-//#define CMATH_MTX44_FAST_SQRT
-//#define CMATH_MTX44_TABLE_SQRT
-//#define CMATH_MTX44_TABLE_TRIGONOMETRY
+#define CMATH_VEC2_HIGH_PREC_FLOAT_TRIGONOMETRY
+#define CMATH_VEC3_HIGH_PREC_FLOAT_TRIGONOMETRY
+#define CMATH_VEC4_HIGH_PREC_FLOAT_TRIGONOMETRY
+#define CMATH_MTX33_HIGH_PREC_FLOAT_TRIGONOMETRY
+#define CMATH_MTX44_HIGH_PREC_FLOAT_TRIGONOMETRY
+#define CMATH_QUAT_HIGH_PREC_FLOAT_TRIGONOMETRY
+#define CMATH_PLANE_HIGH_PREC_FLOAT_TRIGONOMETRY
 
-//#define CMATH_QUAT_FAST_SQRT
-//#define CMATH_QUAT_TABLE_SQRT
-//#define CMATH_QUAT_TABLE_TRIGONOMETRY
+// Table trigonometry computation
+#elif defined (MATH_FLOAT_TABLE_TRIGONOMETRY)
+//--#pragma message "Table float trigonometry calculation in algebra classes"
+#define CMATH_VEC2_FLOAT_TABLE_TRIGONOMETRY
+#define CMATH_VEC3_FLOAT_TABLE_TRIGONOMETRY
+#define CMATH_VEC4_FLOAT_TABLE_TRIGONOMETRY
+#define CMATH_MTX33_FLOAT_TABLE_TRIGONOMETRY
+#define CMATH_MTX44_FLOAT_TABLE_TRIGONOMETRY
+#define CMATH_QUAT_FLOAT_TABLE_TRIGONOMETRY
+#define CMATH_PLANE_FLOAT_TABLE_TRIGONOMETRY
+
+// Default trigonometry computation
+//--#else
+//--#pragma message "Default float trigonometry calculation in algebra classes"
+#endif // Trigonometry computation precision preprocessor
+
+
 
 #endif //_MATH_LIB_DEFINES_H_
