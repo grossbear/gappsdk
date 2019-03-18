@@ -8,7 +8,7 @@
 
 #include <math.h>
 
-#include "base/common/platform_types.h"
+#include "base/common/platform/platform_types.h"
 #include "prng.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////
