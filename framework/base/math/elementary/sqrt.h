@@ -77,14 +77,14 @@ tfixed32<bits> m_ifxsqrt(tfixed32<bits> val)
             root = temp;
 
             if (squaretemp == val)
-			{
-				return root;
-			}
+            {
+                return root;
+            }
         }
 
         bts >>= 1;
     }
-    
+
     return root;
 }
 

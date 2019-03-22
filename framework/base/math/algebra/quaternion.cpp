@@ -96,7 +96,7 @@ T CMQuatLengthSq(const CMQuaternion<T> &Q)
 template <class T>
 void CMQuatNormalize(CMQuaternion<T> &qOut, const CMQuaternion<T> &qIn)
 {
-    T revsqr = MQUATRSQRT(qIn.x, qIn.y, qIn.z, qIn.w);
+    T revsqr = MQUATREVSQRT(qIn.x, qIn.y, qIn.z, qIn.w);
 
     qOut.x = qIn.x*revsqr;
     qOut.y = qIn.y*revsqr;

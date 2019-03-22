@@ -672,9 +672,9 @@ void munpack01(float &xout, float &yout, float &zout, float xin, float yin, floa
 #else
 void munpack01(float &xout, float &yout, float &zout, float xin, float yin, float zin)
 {
-    xout = munpack01(in[0]);
-    yout = munpack01(in[1]);
-    zout = munpack01(in[2]);
+    xout = munpack01(xin);
+    yout = munpack01(yin);
+    zout = munpack01(zin);
 }
 #endif
 

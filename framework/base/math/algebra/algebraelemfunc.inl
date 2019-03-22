@@ -27,7 +27,7 @@ M_FORCEINL double MVEC2SQRT(double x)
 {
     return msqrt(x);
 }
-
+///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float MVEC2SQRT(float x, float y)
 {
 #ifdef CMATH_VEC2_FLOAT_TABLE_SQRT
@@ -51,7 +51,7 @@ M_FORCEINL float MVEC2REVSQRT(float x, float y)
     ASSERT((x*x + y*y) > FLOAT_EPS);
 
 #ifdef CMATH_VEC2_FLOAT_TABLE_SQRT
-    return m_rtsqrt(x*x + y*y);
+    return 1.0f/m_tsqrt(x*x + y*y);
 #elif defined(CMATH_VEC2_FAST_FLOAT_SQRT)
     return m_rfsqrt(x*x + y*y);
 #elif defined(CMATH_VEC2_HIGH_PREC_FLOAT_SQRT)
@@ -164,7 +164,7 @@ M_FORCEINL float MVEC3REVSQRT(float x, float y, float z)
     ASSERT((x*x + y*y + z*z) > FLOAT_EPS);
 
 #ifdef CMATH_VEC3_FLOAT_TABLE_SQRT
-    return m_rtsqrt(x*x + y*y + z*z);
+    return 1.0f/m_tsqrt(x*x + y*y + z*z);
 #elif defined(CMATH_VEC3_FAST_FLOAT_SQRT)
     return m_rfsqrt(x*x + y*y + z*z);
 #elif defined(CMATH_VEC3_HIGH_PREC_FLOAT_SQRT)
@@ -279,7 +279,7 @@ M_FORCEINL float MVEC4REVSQRT(float x, float y, float z, float w)
     ASSERT((x*x + y*y + z*z + w*w) > FLOAT_EPS);
 
 #ifdef CMATH_VEC4_FLOAT_TABLE_SQRT
-    return m_rtsqrt(x*x + y*y + z*z + w*w);
+    return 1.0f/m_tsqrt(x*x + y*y + z*z + w*w);
 #elif defined(CMATH_VEC4_FAST_FLOAT_SQRT)
     return m_rfsqrt(x*x + y*y + z*z + w*w);
 #elif defined(CMATH_VEC4_HIGH_PREC_FLOAT_SQRT)
@@ -374,7 +374,7 @@ M_FORCEINL double MPLANESQRT(double a, double b, double c)
 M_FORCEINL float MPLANEREVSQRT(float a, float b, float c)
 {
 #ifdef CMATH_PLANE_FLOAT_TABLE_SQRT
-    return m_rtsqrt(a*a + b*b + c*c);
+    return 1.0f/m_tsqrt(a*a + b*b + c*c);
 #elif defined(CMATH_PLANE_FAST_FLOAT_SQRT)
     return m_rfsqrt(a*a + b*b + c*c);
 #elif defined(CMATH_PLANE_HIGH_PREC_FLOAT_SQRT)
@@ -693,7 +693,7 @@ M_FORCEINL double MQUATSQRT(double x)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
-M_FORCEINL float MQUATRSQRT(float x, float y, float z, float w)
+M_FORCEINL float MQUATREVSQRT(float x, float y, float z, float w)
 {
 #ifdef CMATH_QUAT_FAST_FLOAT_SQRT
     return m_rfsqrt(x*x + y*y + z*z + w*w);
@@ -707,7 +707,7 @@ M_FORCEINL float MQUATRSQRT(float x, float y, float z, float w)
 #endif
 }
 ///////////////////////////////////////////////////////////////////////////////////////
-M_FORCEINL double MQUATRSQRT(double x, double y, double z, double w)
+M_FORCEINL double MQUATREVSQRT(double x, double y, double z, double w)
 {
     return 1.0/msqrt(x*x + y*y + z*z + w*w);
 }
