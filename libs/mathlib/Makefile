@@ -7,26 +7,60 @@ OBJDIR=obj
 FRAMEWORKPATH = ../../framework
 MATHPATH = ../../framework/base/math
 
-EMPTYFLAG = 
-ifndef SQRTPRECFLAG
-SQRTPRECFLAG = MATH_HIGH_PREC_FLOAT_SQRT
+CALCPRECFLAGS = 
+ifdef FLTSQRTPRECFLAG
+CALCPRECFLAGS += -D$(FLTSQRTPRECFLAG)
 endif
-ifndef TRIPRECFLAG
-TRIPRECFLAG = MATH_HIGH_PREC_FLOAT_TRIGONOMETRY
+ifdef FLTTRIPRECFLAG
+CALCPRECFLAGS += -D$(FLTTRIPRECFLAG)
+endif
+ifeq ($(SIMDEXTFLAG), 1)
+CALCPRECFLAGS += -DMATH_SIMD_EXT
+endif
+ifeq ($(INTFLOATNOFPU), 1)
+CALCPRECFLAGS += -DMATH_INTFLOAT_SW
 endif
 
-CALCPRECFLAGS = -D$(SQRTPRECFLAG) -D$(TRIPRECFLAG) 
 
 
 _OBJ = thalf.o elemfunc.o sqrt.o trigonometry.o prng.o perlin.o\
 vector.o plane.o matrix.o quaternion.o 3dmath.o
 
-all: $(_OBJ) mathlib.a
+all: buildinfo $(_OBJ) mathlib.a
 	
 # link
 mathlib.a: $(patsubst %, %, $(_OBJ))
 	@echo "Building static library: $@"
 	@$(ARCH) rcs $@ $^
+
+# info
+info:
+	@echo "FLTSQRTPRECFLAG - float square root precision flag"
+	@echo "values: {MATH_HIGH_PREC_FLOAT_SQRT; MATH_FLOAT_TABLE_SQRT; MATH_FAST_FLOAT_SQRT}"
+	@echo "FLTTRIPRECFLAG - float trigonometry precision flag"
+	@echo "values: {MATH_HIGH_PREC_FLOAT_TRIGONOMETRY; MATH_FLOAT_TABLE_TRIGONOMETRY}"
+	@echo ""
+	@echo "SIMDEXTFLAG - SIMD extension flag"
+	@echo "INTFLOATNOFPU - software float-integer convertion"
+
+buildinfo:
+ifeq ($(FLTSQRTPRECFLAG), MATH_HIGH_PREC_FLOAT_SQRT)
+	@echo "High precision float square root calculation in algebra classes"
+else ifeq ($(FLTSQRTPRECFLAG), MATH_FLOAT_TABLE_SQRT)
+	@echo "Table float square root calculation in algebra classes"
+else ifeq ($(FLTSQRTPRECFLAG), MATH_FAST_FLOAT_SQRT)
+	@echo "Approximation float square root calculation in algebra classes"
+else
+	@echo "Default float square root calculation in algebra classes"
+endif
+
+ifeq ($(SQRTPRECFLAG), MATH_HIGH_PREC_FLOAT_TRIGONOMETRY)
+	@echo "High precision float trigonometry calculation in algebra classes"
+else ifeq ($(SQRTPRECFLAG), MATH_FLOAT_TABLE_TRIGONOMETRY)
+	@echo "Table float trigonometry calculation in algebra classes"
+else
+	@echo "Default float trigonometry calculation in algebra classes"
+endif
 	
 	
 # compile source file
@@ -83,5 +117,6 @@ quaternion.o: $(MATHPATH)/algebra/quatinst.cpp
 
 # remove compilation products
 clean:
-	@rm *.o mathlib.a
-	@echo "Removing mathlib.a and object files."
+	@rm *.o
+	@rm mathlib.a
+	@echo "Removing static library mathlib.a and compiled object files."
