@@ -9,7 +9,12 @@
 #include <math.h>
 
 #include "base/common/platform/platform_types.h"
+#include "mathconsts.h"
+#include "mathlibdefs.h"
+#include "elementary/elemfunc.h"
+#include "elementary/interpolation.h"
 #include "prng.h"
+
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Pseudo random number generation function
@@ -51,180 +56,194 @@ float mprng(int32t x, int32t y, int32t z, int32t w)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
-
-
-/*
-inline float SmoothNoise1D(int x)
+// Mixed pseudo random number generation function
+float mmixprng(int32t x)
 {
-	return Noise1D(x)/2 + Noise1D(x-1)/4 + Noise1D(x+1)/4;
+    return mprng(x)/2.f + mprng(x-1)/4.f + mprng(x+1)/4.f;
 }
 
-inline float SmoothNoise2D(int x, int y)
+///////////////////////////////////////////////////////////////////////////////////////
+// Mixed pseudo random number generation function
+float mmixprng(int32t x, int32t y)
 {
-	float corners = (Noise2D(x-1,y-1) + Noise2D(x+1,y-1) + Noise2D(x-1,y+1) + Noise2D(x+1,y+1))/16;
-	float sides = (Noise2D(x+1,y) + Noise2D(x-1,y) + Noise2D(x,y+1) + Noise2D(x,y-1))/8;
-	float center = Noise2D(x,y)/4;
+	float corners = (mprng(x-1,y-1) + mprng(x+1,y-1) + mprng(x-1,y+1) + mprng(x+1,y+1))/16.f;
+	float sides = (mprng(x+1,y) + mprng(x-1,y) + mprng(x,y+1) + mprng(x,y-1))/8.f;
+	float center = mprng(x,y)/4.f;
+
+	return corners + sides + center;    
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+// Mixed pseudo random number generation function
+float mmixprng2d(int32t x, int32t y, int32t z)
+{
+    float corners = (mprng(x-1,y-1,z) + mprng(x+1,y-1,z) + mprng(x-1,y+1,z) + mprng(x+1,y+1,z))/16.f;
+	float sides = (mprng(x+1,y,z) + mprng(x-1,y,z) + mprng(x,y+1,z) + mprng(x,y-1,z))/8.f;
+	float center = mprng(x,y,z)/4.f;
 
 	return corners + sides + center;
 }
 
-inline float SmoothNoise2DIn3D(int x, int y, int z)
+///////////////////////////////////////////////////////////////////////////////////////
+// Mixed pseudo random number generation function
+float mmixprng(int32t x, int32t y, int32t z)
 {
-	float corners = (Noise3D(x-1,y-1,z) + Noise3D(x+1,y-1,z) + Noise3D(x-1,y+1,z) + Noise3D(x+1,y+1,z))/16;
-	float sides = (Noise3D(x+1,y,z) + Noise3D(x-1,y,z) + Noise3D(x,y+1,z) + Noise3D(x,y-1,z))/8;
-	float center = Noise3D(x,y,z)/4;
+	float corners = (mprng(x-1,y-1,z+1) + mprng(x+1,y-1,z+1) + mprng(x-1,y+1,z+1) +
+						mprng(x+1,y+1,z+1) + mprng(x+1,y,z+1) + mprng(x-1,y,z+1) +
+						mprng(x,y+1,z+1) + mprng(x,y-1,z+1) +
+					mprng(x-1,y-1,z) + mprng(x+1,y-1,z) + mprng(x-1,y+1,z) +
+						mprng(x+1,y+1,z) +
+					mprng(x-1,y-1,z-1) + mprng(x+1,y-1,z-1) + mprng(x-1,y+1,z-1) +
+						mprng(x+1,y+1,z-1) + mprng(x+1,y,z-1) + mprng(x-1,y,z-1) +
+						mprng(x,y+1,z-1) + mprng(x,y-1,z-1)
+						)/32.f;
 
-	return corners + sides + center;
-}
+	float sides = (mprng(x,y,z+1) + mprng(x+1,y,z) + mprng(x-1,y,z) +
+					mprng(x,y+1,z) + mprng(x,y-1,z) + mprng(x,y,z-1))/24.f;
 
-inline float SmoothNoise3D(int x, int y, int z)
-{
-	float corners = (Noise3D(x-1,y-1,z+1) + Noise3D(x+1,y-1,z+1) + Noise3D(x-1,y+1,z+1) +
-						Noise3D(x+1,y+1,z+1) + Noise3D(x+1,y,z+1) + Noise3D(x-1,y,z+1) +
-						Noise3D(x,y+1,z+1) + Noise3D(x,y-1,z+1) +
-					Noise3D(x-1,y-1,z) + Noise3D(x+1,y-1,z) + Noise3D(x-1,y+1,z) +
-						Noise3D(x+1,y+1,z) +
-					Noise3D(x-1,y-1,z-1) + Noise3D(x+1,y-1,z-1) + Noise3D(x-1,y+1,z-1) +
-						Noise3D(x+1,y+1,z-1) + Noise3D(x+1,y,z-1) + Noise3D(x-1,y,z-1) +
-						Noise3D(x,y+1,z-1) + Noise3D(x,y-1,z-1)
-						)/32;
-
-	float sides = (Noise3D(x,y,z+1) + Noise3D(x+1,y,z) + Noise3D(x-1,y,z) +
-					Noise3D(x,y+1,z) + Noise3D(x,y-1,z) + Noise3D(x,y,z-1))/24;
-
-	float center = Noise3D(x,y,z)/8;
+	float center = mprng(x,y,z)/8.f;
 	
-	return corners + sides + center;
+	return corners + sides + center;    
 }
 
-//1D Noise Generation Function
-float noise (float x)
+///////////////////////////////////////////////////////////////////////////////////////
+// Smooth pseudo random value generation 
+float msmprng(float x)
 {
-	int xinteger = int(x);
+    int32t xinteger = mtoint(x);
 	float fractionx = x - float(xinteger);
 	float v1,v2;
 	
-	v1 = SmoothNoise1D(xinteger);
-	v2 = SmoothNoise1D(xinteger+1);
+	v1 = mmixprng(xinteger);
+	v2 = mmixprng(xinteger+1);
 
-	return cosp(v1,v2,fractionx);
+	return mcosrp(v1,v2,fractionx);
 }
 
-//2D Noise Generation Function
-float noise(float x, float y)
+///////////////////////////////////////////////////////////////////////////////////////
+// Smooth pseudo random value generation 
+float msmprng(float x, float y)
 {
-	int xinterger = int(x);
-	float fractionx = x - float(xinterger);
-	int yinteger = int(y);
-	float fractiony = y - float(yinteger);
-	float v1,v2,v3,v4,i1,i2;
-	float ret;
+    int32t xinterger = mtoint(x);
+    float fractionx = x - mtoreal(xinterger);
+    int32t yinteger = mtoint(y);
+    float fractiony = y - mtoreal(yinteger);
+    float v1,v2,v3,v4,i1,i2;
+    float ret;
 
-	v1 = SmoothNoise2D(xinterger, yinteger);
-	v2 = SmoothNoise2D(xinterger + 1, yinteger);
-	v3 = SmoothNoise2D(xinterger, yinteger + 1);
-	v4 = SmoothNoise2D(xinterger + 1, yinteger + 1);
-	i1 = cosp (v1,v2,fractionx);
-	i2 = cosp (v3,v4,fractionx);
-	ret = cosp (i1,i2,fractiony);
+    v1 = msmprng(xinterger, yinteger);
+    v2 = msmprng(xinterger + 1, yinteger);
+    v3 = msmprng(xinterger, yinteger + 1);
+    v4 = msmprng(xinterger + 1, yinteger + 1);
+    i1 = mcosrp (v1,v2,fractionx);
+    i2 = mcosrp (v3,v4,fractionx);
+    ret = mcosrp (i1,i2,fractiony);
 
-	return ret;
+    return ret;
 }
 
-//3D Noise Generation Function
-float noise(float x, float y, float z, bool Use2DSmooth)
+///////////////////////////////////////////////////////////////////////////////////////
+// Smooth pseudo random value generation
+float msmprng(float x, float y, float z, bool smooth2d)
 {
-	int xinterger = int(x);
-	float fractionx = x - float(xinterger);
-	int yinteger = int(y);
-	float fractiony = y - float(yinteger);
-	int zinteger = int(z);
-	float fractionz = z - float(zinteger);
-	float v1,v2,v3,v4,v5,v6,v7,v8, i1,i2,ires1, i3,i4,ires2;
-	float ret;
+    int32t xinterger = mtoint(x);
+    float fractionx = x - mtoreal(xinterger);
+    int32t yinteger = mtoint(y);
+    float fractiony = y - mtoreal(yinteger);
+    int32t zinteger = mtoint(z);
+    float fractionz = z - mtoreal(zinteger);
+    float v1,v2,v3,v4,v5,v6,v7,v8, i1,i2,ires1, i3,i4,ires2;
+    float ret;
 
-	float (*fpfun)(int,int,int);
-	if(Use2DSmooth)
-		fpfun = SmoothNoise2DIn3D;
-	else
-		fpfun = SmoothNoise3D;
+    float (*fpfun)(int32t,int32t,int32t);
+    if(smooth2d)
+        fpfun = mmixprng2d; //3d
+    else
+        fpfun = mmixprng; //3d
 
-	v1 = fpfun(xinterger, yinteger, zinteger);
-	v2 = fpfun(xinterger + 1, yinteger, zinteger);
-	v3 = fpfun(xinterger, yinteger + 1, zinteger);
-	v4 = fpfun(xinterger + 1, yinteger + 1, zinteger);
+    v1 = fpfun(xinterger, yinteger, zinteger);
+    v2 = fpfun(xinterger + 1, yinteger, zinteger);
+    v3 = fpfun(xinterger, yinteger + 1, zinteger);
+    v4 = fpfun(xinterger + 1, yinteger + 1, zinteger);
 
-	v5 = fpfun(xinterger, yinteger, zinteger + 1);
-	v6 = fpfun(xinterger + 1, yinteger, zinteger + 1);
-	v7 = fpfun(xinterger, yinteger + 1, zinteger + 1);
-	v8 = fpfun(xinterger + 1, yinteger + 1, zinteger + 1);
+    v5 = fpfun(xinterger, yinteger, zinteger + 1);
+    v6 = fpfun(xinterger + 1, yinteger, zinteger + 1);
+    v7 = fpfun(xinterger, yinteger + 1, zinteger + 1);
+    v8 = fpfun(xinterger + 1, yinteger + 1, zinteger + 1);
 
-	i1 = cosp (v1,v2,fractionx);
-	i2 = cosp (v3,v4,fractionx);
-	ires1 = cosp (i1,i2,fractiony);
+    i1 = mcosrp (v1,v2,fractionx);
+    i2 = mcosrp (v3,v4,fractionx);
+    ires1 = mcosrp (i1,i2,fractiony);
 
-	i3 = cosp (v5,v6,fractionx);
-	i4 = cosp (v7,v8,fractionx);
-	ires2 = cosp (i3,i4,fractiony);
+    i3 = mcosrp (v5,v6,fractionx);
+    i4 = mcosrp (v7,v8,fractionx);
+    ires2 = mcosrp (i3,i4,fractiony);
 
-	ret = cosp (ires1,ires2,fractionz);
+    ret = mcosrp (ires1,ires2,fractionz);
 
-	return ret;
+    return ret;
 }
 
-//Fractal Brownian Motion
-//FBM Fractal in 2d 
-float FBM(float x, float y, int octaves, float amplitude, float frequence, float h)
+///////////////////////////////////////////////////////////////////////////////////////
+// Functions from Game Programming Gems book
+
+///////////////////////////////////////////////////////////////////////////////////////
+// Fractal Brownian Motion
+// FBM Fractal in 2d 
+float mfbm(float x, float y, int octaves, float amplitude, float frequence, float h)
 {
-	float ret = 0;
-	for(int i=0; i<octaves; i++)
-	{
-		ret += noise(x*frequence, y*frequence)*amplitude;
-		amplitude *= h;
-		//frequence /= h;
-	}
-	return ret;
+    float ret = 0.0f;
+    for(int i=0; i<octaves; i++)
+    {
+        ret += msmprng(x*frequence, y*frequence)*amplitude;
+        amplitude *= h;
+        //frequence /= h;
+    }
+    return ret;
 }
 
-//FBM fractal in 3d
-float FBM(float x, float y, float z, int octaves, float amplitude, float frequence, 
-		  float h, bool Use2DSmooth)
+///////////////////////////////////////////////////////////////////////////////////////
+// Fractal Brownian Motion
+// FBM fractal in 3d
+float mfbm(float x, float y, float z, int32t octaves, float amplitude, float frequence, 
+		  float h, bool smooth2d)
 {
-	float ret = 0;
-	for(int i=0; i<octaves; i++)
-	{
-		ret += noise(x*frequence, y*frequence, z*frequence, Use2DSmooth)*amplitude;
-		amplitude *= h;
-		//frequence /= h;
-	}
-	return ret;
+    float ret = 0.0f;
+    for(int32t i=0; i<octaves; i++)
+    {
+        ret += msmprng(x*frequence, y*frequence, z*frequence, smooth2d)*amplitude;
+        amplitude *= h;
+        //frequence /= h;
+    }
+    return ret;
 }
 
-//Multifractal in 2d
-float MultiFractal(float x, float y, int octaves, float amplitude, float frequence, float h,
+///////////////////////////////////////////////////////////////////////////////////////
+// Multifractal in 2d
+float mmultifractal(float x, float y, int32t octaves, float amplitude, float frequence, float h,
 				   float offset)
 {
-	float ret = 1;
-	for(int i=0; i<octaves; i++)
-	{
-		ret *= offset*(noise(x*frequence,y*frequence)*amplitude);
-		amplitude *= h;
-	}
+    float ret = 1.f;
+    for(int32t i=0; i<octaves; i++)
+    {
+        ret *= offset*(msmprng(x*frequence,y*frequence)*amplitude);
+        amplitude *= h;
+    }
 
-	return ret;
+    return ret;
 }
 
-//Multifractal in 3d
-float MultiFractal(float x, float y, float z, int octaves, float amplitude, float frequence,
-				   float h, float offset, bool Use2DSmooth)
+///////////////////////////////////////////////////////////////////////////////////////
+// Multifractal in 3d
+float mmultifractal(float x, float y, float z, int32t octaves, float amplitude, float frequence,
+				   float h, float offset, bool smooth2d)
 {
-	float ret = 1;
-	for(int i=0; i<octaves; i++)
-	{
-		ret *= offset*(noise(x*frequence,y*frequence,z*frequence,Use2DSmooth)*amplitude);
-		amplitude *= h;
-	}
+    float ret = 1.f;
+    for(int32t i=0; i<octaves; i++)
+    {
+        ret *= offset*(msmprng(x*frequence,y*frequence,z*frequence,smooth2d)*amplitude);
+        amplitude *= h;
+    }
 
-	return ret;
+    return ret;
 }
-*/
