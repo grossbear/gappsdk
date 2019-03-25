@@ -21,9 +21,9 @@ ifeq ($(INTFLOATNOFPU), 1)
 CALCPRECFLAGS += -DMATH_INTFLOAT_SW
 endif
 
+ #prng.o perlin.o\
 
-
-_OBJ = thalf.o elemfunc.o sqrt.o trigonometry.o prng.o perlin.o\
+_OBJ = thalf.o elemfunc.o sqrt.o trigonometry.o interp.o prng.o perlin.o\
 vector.o plane.o matrix.o quaternion.o 3dmath.o
 
 all: buildinfo $(_OBJ) mathlib.a
@@ -80,7 +80,12 @@ trigonometry.o: $(MATHPATH)/elementary/trigonometry.cpp
 	@echo "Compiling file: $<"
 	@$(CXX) $(CFLAGS) -I$(FRAMEWORKPATH) -I$(MATHPATH) -c $(MATHPATH)/elementary/trigonometry.cpp
 	
-prng.o: $(MATHPATH)/pseudorandom/prng.cpp
+interp.o: $(MATHPATH)/elementary/interpolation.cpp
+	@echo "Compiling file: $<"
+	@$(CXX) $(CFLAGS) -I$(FRAMEWORKPATH) -I$(MATHPATH) -c $(MATHPATH)/elementary/interpolation.cpp
+	@mv interpolation.o $@
+
+prng.o: $(MATHPATH)/pseudorandom/prng.cpp $(MATHPATH)/elementary/interpolation.h $(MATHPATH)/elementary/interpolation.cpp
 	@echo "Compiling file: $<"
 	@$(CXX) $(CFLAGS) -I$(FRAMEWORKPATH) -I$(MATHPATH) -c $(MATHPATH)/pseudorandom/prng.cpp
 	
