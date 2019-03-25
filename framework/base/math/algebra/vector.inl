@@ -46,7 +46,7 @@ M_INLINE CMVector2D<T>::CMVector2D(const CMVector2D & v)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
-//Cast To Pointer  (T *)
+// Cast To Pointer  (T *)
 template <class T>
 M_INLINE CMVector2D<T>::operator T* () const
 {
