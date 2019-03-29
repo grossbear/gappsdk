@@ -25,19 +25,11 @@
 #define MATH_PRIM_SSE
 #endif //MATH_SIMD_EXT
 
-// Library Uses It's Own Conversion From Floating Point Number To Integer And Vice-Versa
-#if defined (MATH_INTFLOAT_SW)
-#define MATH_NO_FPU
-#endif //MATH_INTFLOAT_SW
-
 // Library Uses ILM Functions In Converting Float Types Into Half Type
 //#define MATH_ILM_HALF_CONVERSION
 
-// Build Classes Instantiation Using Following Data Types  
-//#define MATH_DOUBLE_INST
-//#define MATH_LONG_DOUBLE_INST
-//#define MATH_FIXED_INST
-//#define MATH_HALF_INST
+// Header that contains common macros needed to compile library and use externally
+#include "mathdefscommon.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////////////

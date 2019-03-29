@@ -6,6 +6,7 @@ CFLAGS=-std=gnu++11 -Wall
 OBJDIR=obj
 FRAMEWORKPATH = ../../framework
 MATHPATH = ../../framework/base/math
+CMNDEFSHEADER = mathdefscommon.h
 
 CALCPRECFLAGS = 
 ifdef FLTSQRTPRECFLAG
@@ -99,7 +100,40 @@ endif
 ifneq ($(VAR_DATATYPE_4), )
 	@echo "Compiling with "$(VAR_DATATYPE_4)" flag"
 endif
+
+# Creates math common defines header file
+defscommon:
+	@echo "///////////////////////////////////////////////////////////////////////////////////////" > $(MATHPATH)/$(CMNDEFSHEADER)
+	@echo "// $(CMNDEFSHEADER)" >> $(MATHPATH)/$(CMNDEFSHEADER)
+	@echo "//  " >> $(MATHPATH)/$(CMNDEFSHEADER)
+	@echo "// Header contains defined macros both for library and for external usage" >> $(MATHPATH)/$(CMNDEFSHEADER)
+	@echo "// File modified by Makefile script" >> $(MATHPATH)/$(CMNDEFSHEADER)
+	@echo "//  " >> $(MATHPATH)/$(CMNDEFSHEADER)
+	@echo "///////////////////////////////////////////////////////////////////////////////////////" >> $(MATHPATH)/$(CMNDEFSHEADER)
+	@echo "" >> $(MATHPATH)/$(CMNDEFSHEADER)
+
+	@echo "// Library uses it's own conversion from floating point number to integer and vice-versa" >> $(MATHPATH)/$(CMNDEFSHEADER)
+ifeq ($(INTFLOATNOFPU), 1)
+	@echo "#define MATH_NO_FPU" >> $(MATHPATH)/$(CMNDEFSHEADER)
+else
+	@echo "//#define MATH_NO_FPU" >> $(MATHPATH)/$(CMNDEFSHEADER)
+endif
+	@echo "" >> $(MATHPATH)/$(CMNDEFSHEADER)
 	
+	@echo "// Build classes instantiation and functions using following data types" >> $(MATHPATH)/$(CMNDEFSHEADER)
+	@echo "// MATH_DOUBLE_INST, MATH_LONG_DOUBLE_INST, MATH_FIXED_INST, MATH_HALF_INST" >> $(MATHPATH)/$(CMNDEFSHEADER)
+ifneq ($(VAR_DATATYPE_1), )
+	@echo "#define $(VAR_DATATYPE_1)" >> $(MATHPATH)/$(CMNDEFSHEADER)
+endif
+ifneq ($(VAR_DATATYPE_2), )
+	@echo "#define $(VAR_DATATYPE_2)" >> $(MATHPATH)/$(CMNDEFSHEADER)
+endif
+ifneq ($(VAR_DATATYPE_3), )
+	@echo "#define $(VAR_DATATYPE_3)" >> $(MATHPATH)/$(CMNDEFSHEADER)
+endif
+ifneq ($(VAR_DATATYPE_4), )
+	@echo "#define $(VAR_DATATYPE_4)" >> $(MATHPATH)/$(CMNDEFSHEADER)
+endif
 	
 # compile source file
 thalf.o: $(MATHPATH)/types/thalf.cpp
