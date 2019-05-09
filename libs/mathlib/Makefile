@@ -57,6 +57,7 @@ mathlib.a: $(patsubst %, %, $(_OBJ))
 
 # info
 info:
+	@echo "--------------------------------------------------------------------------------"
 	@echo "FLTSQRTPRECFLAG - float square root precision flag"
 	@echo "values: {MATH_HIGH_PREC_FLOAT_SQRT; MATH_FLOAT_TABLE_SQRT; MATH_FAST_FLOAT_SQRT}"
 	@echo "FLTTRIPRECFLAG - float trigonometry precision flag"
@@ -66,7 +67,8 @@ info:
 	@echo "INTFLOATNOFPU - software float-integer convertion"
 	@echo "CLASSDATATYPES - Build classes instantiation list using following data types:"
 	@echo "MATH_DOUBLE_INST,MATH_LONG_DOUBLE_INST,MATH_FIXED_INST,MATH_HALF_INST"
-	@echo "note: MATH_LONG_DOUBLE_INST, MATH_FIXED_INST, MATH_HALF_INST - unsopported yet"
+	@echo "note: MATH_LONG_DOUBLE_INST, MATH_FIXED_INST, MATH_HALF_INST - unsupported yet"
+	@echo "--------------------------------------------------------------------------------"
 
 
 buildinfo:
@@ -103,6 +105,7 @@ endif
 
 # Creates math common defines header file
 defscommon:
+	@echo "defscommon"
 	@echo "///////////////////////////////////////////////////////////////////////////////////////" > $(MATHPATH)/$(CMNDEFSHEADER)
 	@echo "// $(CMNDEFSHEADER)" >> $(MATHPATH)/$(CMNDEFSHEADER)
 	@echo "//  " >> $(MATHPATH)/$(CMNDEFSHEADER)
