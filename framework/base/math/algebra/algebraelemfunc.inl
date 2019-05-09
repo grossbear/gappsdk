@@ -8,6 +8,11 @@
 #ifndef _ALGEBRA_ELEMENTARY_FUNC_INL
 #define _ALGEBRA_ELEMENTARY_FUNC_INL
 
+#ifdef MATH_PRIM_SSE
+#include <xmmintrin.h>
+#include <memory.h>
+#endif //MATH_PRIM_SSE
+
 ///////////////////////////////////////////////////////////////////////////////////////
 // Vec2 
 M_FORCEINL float MVEC2SQRT(float x)
@@ -119,6 +124,7 @@ M_FORCEINL double MVEC2ACOS(double x)
 {
     return macos(x);
 }
+
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Vec3 
@@ -233,6 +239,66 @@ M_FORCEINL double MVEC3ACOS(double x)
 {
     return macos(x);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////
+M_FORCEINL void MVEC3PACK01(float vout[3], const float vin[3])
+{
+#ifdef MATH_PRIM_SSE
+    __m128 halfonevreg = _mm_set_ps(0.5f,0.5f,0.5f,0.5f);
+    __m128 invreg = _mm_set_ps(0.0f,vin[2],vin[1],vin[0]);
+    
+    __m128 outvreg = _mm_fmadd_ps(invreg, halfonevreg, halfonevreg);
+    
+    float outvals[4] = {0.0f};
+    _mm_store_ps(outvals, outvreg);
+    
+    memcpy(vout, outvals, sizeof(float)*3);
+#else
+    vout[0] = mpack01(vin[0]);
+    vout[1] = mpack01(vin[1]);
+    vout[2] = mpack01(vin[2]);
+#endif
+}
+///////////////////////////////////////////////////////////////////////////////////////
+M_FORCEINL void MVEC3PACK01(double vout[3], const double vin[3])
+{
+    vout[0] = mpack01(vin[0]);
+    vout[1] = mpack01(vin[1]);
+    vout[2] = mpack01(vin[2]);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+M_FORCEINL void MVEC3UNPACK01(float vout[4], const float vin[4])
+{
+#ifdef MATH_PRIM_SSE
+    __m128 onevreg = _mm_set_ps(1.f,1.f,1.f,1.f);
+    __m128 twovreg = _mm_set_ps(2.f,2.f,2.f,2.f);
+    
+    __m128 invreg = _mm_set_ps(0.0f,vin[2],vin[1],vin[0]);
+    __m128 outvreg = _mm_fmsub_ps(invreg, twovreg, onevreg);
+    
+    float outvals[4] = {0.0f};
+    _mm_store_ps(outvals, outvreg);
+    
+    memcpy(vout, outvals, sizeof(float)*3);
+#else
+    vout[0] = munpack01(vin[0]);
+    vout[1] = munpack01(vin[1]);
+    vout[2] = munpack01(vin[2]);
+#endif
+}
+///////////////////////////////////////////////////////////////////////////////////////
+M_FORCEINL void MVEC3UNPACK01(double vout[4], const double vin[4])
+{
+    vout[0] = munpack01(vin[0]);
+    vout[1] = munpack01(vin[1]);
+    vout[2] = munpack01(vin[2]);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////

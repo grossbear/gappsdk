@@ -37,13 +37,7 @@ tfixed32<bits> m_xsqrt(tfixed32<bits> x);
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL float msqrt(float x)
 {
-#ifdef CMATH_TABLE_SQRT
-    return m_tsqrt(x);
-#elif CMATH_FAST_SQRT
-    return 1.0f/m_rfsqrt(x);
-#else
     return sqrtf(x);
-#endif
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL double msqrt(double x)

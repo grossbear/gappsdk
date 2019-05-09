@@ -14,10 +14,10 @@
 #include "mathconsts.h"
 #include "mathlibdefs.h"
 
-#ifdef MATH_PRIM_SSE 
+/*#ifdef MATH_PRIM_SSE 
 #include <xmmintrin.h>
 #include <memory.h>
-#endif
+#endif*/
 
 #include "elemfunc.h"
 #include "intreal.h"
@@ -515,7 +515,7 @@ template bool misprim<uint32t>(uint32t n);
 template bool misprim<uint64t>(uint64t n);
 ///////////////////////////////////////////////////////////////////////////////////////
 
-
+/*
 ///////////////////////////////////////////////////////////////////////////////////////
 #ifdef MATH_PRIM_SSE
 void mpack01(float out[], const float in[], int32t size)
@@ -705,6 +705,7 @@ void munpack01_3(float out[], const float in[])
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
+*/
 
 
 ///////////////////////////////////////////////////////////////////////////////////////

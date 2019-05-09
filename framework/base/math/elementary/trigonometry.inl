@@ -32,7 +32,6 @@ M_FORCEINL double mcos(double x)
 ///////////////////////////////////////////////////////////////////////////////////////
 M_FORCEINL void  msincos(float angle, float &sin_val, float &cos_val)
 {
-    //printf("msincos\n");
     sin_val = msin(angle);
     cos_val = mcos(angle);
 }
