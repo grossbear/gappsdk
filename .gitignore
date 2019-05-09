@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# Ignore some source files
+framework/base/math/mathdefscommon.h
