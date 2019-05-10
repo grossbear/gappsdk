@@ -48,7 +48,7 @@ endif
 _OBJ = thalf.o elemfunc.o sqrt.o trigonometry.o interp.o prng.o perlin.o\
 vector.o plane.o matrix.o quaternion.o 3dmath.o
 
-all: buildinfo $(_OBJ) mathlib.a
+all: buildinfo defscommon $(_OBJ) mathlib.a
 	
 # link
 mathlib.a: $(patsubst %, %, $(_OBJ))
@@ -126,16 +126,24 @@ endif
 	@echo "// Build classes instantiation and functions using following data types" >> $(MATHPATH)/$(CMNDEFSHEADER)
 	@echo "// MATH_DOUBLE_INST, MATH_LONG_DOUBLE_INST, MATH_FIXED_INST, MATH_HALF_INST" >> $(MATHPATH)/$(CMNDEFSHEADER)
 ifneq ($(VAR_DATATYPE_1), )
+	@echo "#ifndef $(VAR_DATATYPE_1)" >> $(MATHPATH)/$(CMNDEFSHEADER)
 	@echo "#define $(VAR_DATATYPE_1)" >> $(MATHPATH)/$(CMNDEFSHEADER)
+	@echo "#endif //$(VAR_DATATYPE_1)" >> $(MATHPATH)/$(CMNDEFSHEADER)
 endif
 ifneq ($(VAR_DATATYPE_2), )
+	@echo "#ifndef $(VAR_DATATYPE_2)" >> $(MATHPATH)/$(CMNDEFSHEADER)
 	@echo "#define $(VAR_DATATYPE_2)" >> $(MATHPATH)/$(CMNDEFSHEADER)
+	@echo "#endif //$(VAR_DATATYPE_2)" >> $(MATHPATH)/$(CMNDEFSHEADER)
 endif
 ifneq ($(VAR_DATATYPE_3), )
+	@echo "#ifndef $(VAR_DATATYPE_3)" >> $(MATHPATH)/$(CMNDEFSHEADER)
 	@echo "#define $(VAR_DATATYPE_3)" >> $(MATHPATH)/$(CMNDEFSHEADER)
+	@echo "#endif //$(VAR_DATATYPE_3)" >> $(MATHPATH)/$(CMNDEFSHEADER)
 endif
 ifneq ($(VAR_DATATYPE_4), )
+	@echo "#ifndef $(VAR_DATATYPE_4)" >> $(MATHPATH)/$(CMNDEFSHEADER)
 	@echo "#define $(VAR_DATATYPE_4)" >> $(MATHPATH)/$(CMNDEFSHEADER)
+	@echo "#endif //$(VAR_DATATYPE_4)" >> $(MATHPATH)/$(CMNDEFSHEADER)
 endif
 	
 # compile source file

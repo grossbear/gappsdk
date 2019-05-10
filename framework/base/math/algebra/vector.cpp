@@ -7,6 +7,20 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
+// Performs A Linear Interpolation Between Two 2D Vectors
+template <class T>
+void CMVec2Lerp(CMVector2D<T> &vOut, const CMVector2D<T> &v1, const CMVector2D<T> &v2, T weight)
+{
+    T x = mlerp(v1.x, v2.x, weight);
+    T y = mlerp(v1.y, v2.y, weight);
+
+    vOut.x = x;
+    vOut.y = y;
+
+    return ;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
 // Rotate 2D Vector 
 template <class T>
 void CMVec2Rotate(CMVector2D<T> &vOut, const CMVector2D<T> &vIn, T rad)
@@ -25,7 +39,6 @@ void CMVec2Rotate(CMVector2D<T> &vOut, const CMVector2D<T> &vIn, T rad)
 
 	return ;
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Returns The Length Of A 2D Vector
@@ -259,11 +272,42 @@ void CMVec2Hermite(CMVector2D<T> &vOut, const CMVector2D<T> &v1,
 
     vOut = v2*a1 + m1*a2 + m2*a3 + v3*a4;
 }
-///////////////////////////////////////////////////////////////////////////////////////
 
+///////////////////////////////////////////////////////////////////////////////////////
+// Performs A Pack Operation Of All Values In 2D Vector From [-1,1] To [0,1]
+template <class T>
+void CMVec2Pack01(CMVector2D<T> &vOut, const CMVector2D<T> &vIn)
+{
+	vOut.x = mpack01(vIn.x);
+    vOut.y = mpack01(vIn.y);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+// Performs An Unpack Operation Of All Values In 2D Vector From [0,1] To [-1,1]
+template <class T>
+void CMVec2Unpack01(CMVector2D<T> &vOut, const CMVector2D<T> &vIn)
+{
+    vOut.x = munpack01(vIn.x);
+    vOut.y = munpack01(vIn.y);
+}
+///////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Vector3D Methods
+
+///////////////////////////////////////////////////////////////////////////////////////
+// Performs A Linear Interpolation Between Two 3D Vectors
+template <class T>
+void CMVec3Lerp(CMVector3D<T> &vOut, const CMVector3D<T> &v1, const CMVector3D<T> &v2, T weight)
+{
+    T x = mlerp(v1.x, v2.x, weight);
+    T y = mlerp(v1.y, v2.y, weight);
+    T z = mlerp(v1.z, v2.z, weight);
+
+    vOut.x = x;
+    vOut.y = y;
+    vOut.z = z;
+}
 
 ////////////////////////////////////////////////////////////////////////////
 // Rotate A 3D Vector In X Axis, Using The Specified Angle In Radians
@@ -555,7 +599,22 @@ void CMVec3Cosrp(CMVector3D<T> &vOut, const CMVector3D<T> &v1, const CMVector3D<
 ///////////////////////////////////////////////////////////////////////////////////////
 // 4D Vector
 
-// DO POPRAKI - Cross Product in 4 dimentions 
+///////////////////////////////////////////////////////////////////////////////////////
+// Performs A Linear Interpolation Between Two 4D Vectors
+template <class T>
+void CMVec4Lerp(CMVector4D<T> &vOut, const CMVector4D<T> &v1, const CMVector4D<T> &v2, T weight)
+{
+    T x = mlerp(v1.x, v2.x, weight);
+    T y = mlerp(v1.y, v2.y, weight);
+    T z = mlerp(v1.z, v2.z, weight);
+    T w = mlerp(v1.w, v2.w, weight);
+
+    vOut.x = x;
+    vOut.y = y;
+    vOut.z = z;
+    vOut.w = w;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////
 // Cross Product Of Two 4D Vectors
 template <class T>
@@ -564,6 +623,7 @@ void CMVec4Cross(CMVector4D<T> &vOut, const CMVector4D<T> &v1, const CMVector4D<
     vOut.x = v1.y*v2.z - v1.z*v2.y;
     vOut.y = v1.z*v2.x - v1.x*v2.z;
     vOut.z = v1.x*v2.y - v1.y*v2.x;
+	vOut.w = T(1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////

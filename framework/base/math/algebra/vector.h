@@ -81,11 +81,6 @@ template <class T>
 T CMVec2CCW(const CMVector2D<T> &v1, const CMVector2D<T> &v2);
 
 ///////////////////////////////////////////////////////////////////////////////////////
-// Performs A Linear Interpolation Between Two 2D Vectors
-template <class T>
-void CMVec2Lerp(CMVector2D<T> &vOut, const CMVector2D<T> &v1, const CMVector2D<T> &v2, T weight);
-
-///////////////////////////////////////////////////////////////////////////////////////
 // Returns A 2D Vector That Is Made Up Of The Largest Components Of Two 2D Vectors
 template <class T>
 void CMVec2Max(CMVector2D<T> &vOut, const CMVector2D<T> &v1, const CMVector2D<T> &v2);
@@ -108,6 +103,11 @@ void CMVec2ScaleInv(CMVector2D<T> &vOut, const CMVector2D<T> &vIn, T scale);
 //---------------------------
 // Non-Inline 
 //---------------------------
+
+///////////////////////////////////////////////////////////////////////////////////////
+// Performs A Linear Interpolation Between Two 2D Vectors
+template <class T>
+void CMVec2Lerp(CMVector2D<T> &vOut, const CMVector2D<T> &v1, const CMVector2D<T> &v2, T weight);
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Rotate A 2D Vector, Using The Specified Angle In Radians
@@ -194,6 +194,16 @@ void CMVec2Sqrp(CMVector2D<T> &vOut, const CMVector2D<T> &v1, const CMVector2D<T
 template <class T>
 void CMVec2Cosrp(CMVector2D<T> &vOut, const CMVector2D<T> &v1, const CMVector2D<T> &v2, T factor);
 
+///////////////////////////////////////////////////////////////////////////////////////
+// Performs A Pack Operation Of All Values In 2D Vector From [-1,1] To [0,1]
+template <class T>
+void CMVec2Pack01(CMVector2D<T> &vOut, const CMVector2D<T> &vIn);
+
+///////////////////////////////////////////////////////////////////////////////////////
+// Performs An Unpack Operation Of All Values In 2D Vector From [0,1] To [-1,1]
+template <class T>
+void CMVec2Unpack01(CMVector2D<T> &vOut, const CMVector2D<T> &vIn);
+
 #endif //_CMVECTOR2D_
 
 
@@ -278,11 +288,6 @@ template <class T>
 void CMVec3Cross(CMVector3D<T> &vOut, const CMVector3D<T> &v1, const CMVector3D<T> &v2);
 
 ///////////////////////////////////////////////////////////////////////////////////////
-// Performs A Linear Interpolation Between Two 3D Vectors
-template <class T>
-void CMVec3Lerp(CMVector3D<T> &vOut, const CMVector3D<T> &v1, const CMVector3D<T> &v2, T weight);
-
-///////////////////////////////////////////////////////////////////////////////////////
 // Returns A 3D Vector That Is Made Up Of The Largest Components Of Two 3D Vectors
 template <class T>
 void CMVec3Max(CMVector3D<T> &vOut, const CMVector3D<T> &v1, const CMVector3D<T> &v2);
@@ -310,6 +315,11 @@ void CMVec3Set(CMVector3D<T> &v, T x, T y, T z);
 //---------------------------
 // Non-Inline 
 //---------------------------
+
+///////////////////////////////////////////////////////////////////////////////////////
+// Performs A Linear Interpolation Between Two 3D Vectors
+template <class T>
+void CMVec3Lerp(CMVector3D<T> &vOut, const CMVector3D<T> &v1, const CMVector3D<T> &v2, T weight);
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Rotate A 3D Vector In X Axis, Using The Specified Angle In Radians
@@ -491,11 +501,6 @@ template <class T>
 T CMVec4Dot(const CMVector3D<T> &v1, const CMVector3D<T> &v2);
 
 ///////////////////////////////////////////////////////////////////////////////////////
-// Performs A Linear Interpolation Between Two 4D Vectors
-template <class T>
-void CMVec4Lerp(CMVector4D<T> &vOut, const CMVector4D<T> &v1, const CMVector4D<T> &v2, T weight);
-
-///////////////////////////////////////////////////////////////////////////////////////
 // Returns A 4D Vector That Is Made Up Of The Largest Components Of Two 4D Vectors
 template <class T>
 void CMVec4Max(CMVector4D<T> &vOut, const CMVector4D<T> &v1, const CMVector4D<T> &v2);
@@ -518,6 +523,11 @@ void CMVec4ScaleInv(CMVector4D<T> &vOut, const CMVector4D<T> &vIn, T scale);
 //---------------------------
 // Non-Inline 
 //---------------------------
+
+///////////////////////////////////////////////////////////////////////////////////////
+// Performs A Linear Interpolation Between Two 4D Vectors
+template <class T>
+void CMVec4Lerp(CMVector4D<T> &vOut, const CMVector4D<T> &v1, const CMVector4D<T> &v2, T weight);
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Cross Product Of Two 4D Vectors

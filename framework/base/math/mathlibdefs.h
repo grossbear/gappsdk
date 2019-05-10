@@ -23,6 +23,7 @@
 // Primary Function That Has SSE Implementation
 #if defined (MATH_SIMD_EXT)
 #define MATH_PRIM_SSE
+#define MATH_ALGEBRA_SSE
 #endif //MATH_SIMD_EXT
 
 // Library Uses ILM Functions In Converting Float Types Into Half Type

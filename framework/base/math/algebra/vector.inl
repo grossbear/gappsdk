@@ -261,20 +261,6 @@ M_INLINE void CMVec2ScaleInv(CMVector2D<T> &vOut, const CMVector2D<T> &vIn, T sc
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
-// Performs A Linear Interpolation Between Two 2D Vectors
-template <class T>
-M_INLINE void CMVec2Lerp(CMVector2D<T> &vOut, const CMVector2D<T> &v1, const CMVector2D<T> &v2, T weight)
-{
-    T x = v1.x + ((v2.x - v1.x)*weight);
-    T y = v1.y + ((v2.y - v1.y)*weight);
-
-    vOut.x = x;
-    vOut.y = y;
-
-    return ;
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // 3D Vector Structure Constructors
@@ -512,20 +498,6 @@ M_INLINE void CMVec3Cross(CMVector3D<T> &vOut, const CMVector3D<T> &v1, const CM
     vOut.x = v1.y*v2.z - v1.z*v2.y;
     vOut.y = v1.z*v2.x - v1.x*v2.z; //v1.x*v2.z - v1.z*v2.x; 
     vOut.z = v1.x*v2.y - v1.y*v2.x;
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
-// Performs A Linear Interpolation Between Two 3D Vectors
-template <class T>
-M_INLINE void CMVec3Lerp(CMVector3D<T> &vOut, const CMVector3D<T> &v1, const CMVector3D<T> &v2, T weight)
-{
-    T x = v1.x + ((v2.x - v1.x)*weight);
-    T y = v1.y + ((v2.y - v1.y)*weight);
-    T z = v1.z + ((v2.z - v1.z)*weight);
-
-    vOut.x = x;
-    vOut.y = y;
-    vOut.z = z;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -841,22 +813,6 @@ template <class T>
 M_INLINE T CMVec4Dot(const CMVector4D<T> &v1, const CMVector4D<T> &v2)
 {
 	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w*v2.w;
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
-// Performs A Linear Interpolation Between Two 4D Vectors
-template <class T>
-M_INLINE void CMVec4Lerp(CMVector4D<T> &vOut, const CMVector4D<T> &v1, const CMVector4D<T> &v2, T weight)
-{
-    T x = v1.x + ((v2.x - v1.x)*weight);
-    T y = v1.y + ((v2.y - v1.y)*weight);
-    T z = v1.z + ((v2.z - v1.z)*weight);
-    T w = v1.w + ((v2.w - v1.w)*weight);
-
-    vOut.x = x;
-    vOut.y = y;
-    vOut.z = z;
-    vOut.w = w;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////

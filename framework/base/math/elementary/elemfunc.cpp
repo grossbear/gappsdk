@@ -231,7 +231,7 @@ M_API int64t mninf(double d)
 ///////////////////////////////////////////////////////////////////////////////////////
 // Lomont Compare Function
 // Fast Function To Compare Two Floating Point Numbers
-M_API bool mlcmp(float af, float bf, int32t maxDiff)
+M_API bool mlcmp(float af, float bf, int32t max_diff)
 {
     int32t ai;
     int32t bi;
@@ -244,8 +244,8 @@ M_API bool mlcmp(float af, float bf, int32t maxDiff)
     ASSERT((test==0) || (0xffffffff == (uint32t)test));
 
     int32t diff = (((0x80000000 - ai)&(test)) | (ai & (~test))) - bi;
-    int32t v1 = maxDiff + diff;
-    int32t v2 = maxDiff - diff;
+    int32t v1 = max_diff + diff;
+    int32t v2 = max_diff - diff;
     return (v1 | v2) >= 0;
 }
 
@@ -514,198 +514,6 @@ template bool misprim<uint32t>(uint32t n);
 ///////////////////////////////////////////////////////////////////////////////////////
 template bool misprim<uint64t>(uint64t n);
 ///////////////////////////////////////////////////////////////////////////////////////
-
-/*
-///////////////////////////////////////////////////////////////////////////////////////
-#ifdef MATH_PRIM_SSE
-void mpack01(float out[], const float in[], int32t size)
-{
-    if(size <= 0)
-        return ;
-
-    int32t endsize = size%4;
-    int32t nsize = (size%4) ? (size - endsize) : (size);
-    int32t i = 0;
-    __m128 mhalfone = _mm_set_ps(0.5f,0.5f,0.5f,0.5f);
-
-    if(size >= 4)
-    for(i = 0; i < nsize; i+=4)
-    {
-        __m128 mvals = _mm_loadu_ps(&in[i]);
-        __m128 melem1 = _mm_mul_ps(mvals,mhalfone);
-        __m128 mres = _mm_add_ps(melem1,mhalfone);
-        _mm_store_ps(&out[i],mres);
-    }
-
-    for(int32t j = 0; j < endsize; j++)
-    {
-        __m128 mval = _mm_set_ss(in[i+j]);
-        __m128 melem2 = _mm_mul_ps(mval,mhalfone);
-        __m128 mres = _mm_add_ps(melem2,mhalfone);
-        _mm_store_ss(&out[i+j],mres);
-    }
-}
-#else
-void  mpack01(float out[], const float in[], int32t size)
-{
-    if(size <= 0)
-        return ;
-
-    for(int32t i = 0; i < size; i++)
-    {
-        out[i] = mpack01(in[i]);
-    }
-}
-#endif
-
-///////////////////////////////////////////////////////////////////////////////////////
-#ifdef MATH_PRIM_SSE
-void   mpack01(float &xout, float &yout, float &zout, float xin, float yin, float zin)
-{
-    __m128 mhalfone = _mm_set_ps(0.5f,0.5f,0.5f,0.5f);
-    __m128 mvals = _mm_set_ps(0.0f,zin,yin,xin);
-
-    __m128 melem = _mm_mul_ps(mvals,mhalfone);
-    __m128 mres = _mm_add_ps(melem,mhalfone);
-
-    float fres[4] = {0};
-    _mm_store_ps(fres,mres);
-
-    xout = fres[0];
-    yout = fres[1];
-    zout = fres[2];
-}
-#else
-void   mpack01(float &xout, float &yout, float &zout, float xin, float yin, float zin)
-{
-    xout = mpack01(xin);
-    yout = mpack01(yin);
-    zout = mpack01(zin);
-}
-#endif
-
-
-///////////////////////////////////////////////////////////////////////////////////////
-#ifdef MATH_PRIM_SSE
-void   mpack01_3(float out[], const float in[])
-{
-    __m128 mhalfone = _mm_set_ps(0.5f,0.5f,0.5f,0.5f);
-    __m128 mvals = _mm_set_ps(0.0f,in[2],in[1],in[0]);
-
-    __m128 melem = _mm_mul_ps(mvals,mhalfone);
-    __m128 mres = _mm_add_ps(melem,mhalfone);
-
-    float fres[4] = {0};
-    _mm_store_ps(fres,mres);
-
-    memcpy(&out[0],&fres[0],sizeof(float)*3);
-}
-#else
-void   mpack01_3(float out[], const float in[])
-{
-    out[0] = mpack01(in[0]);
-    out[1] = mpack01(in[1]);
-    out[2] = mpack01(in[2]);
-}
-#endif
-
-///////////////////////////////////////////////////////////////////////////////////////
-#ifdef MATH_PRIM_SSE
-void munpack01(float out[], const float in[], int32t size)
-{
-    if(size <= 0)
-        return ;
-
-    int32t endsize = size%4;
-    int32t nsize = (size%4) ? (size - endsize) : (size);
-    int32t i = 0;
-    __m128 mtwo = _mm_set_ps(2.f,2.f,2.f,2.f);
-    __m128 mone = _mm_set_ps(1.f,1.f,1.f,1.f);
-
-    if(size >= 4)
-    for(i = 0; i < nsize; i+=4)
-    {
-        __m128 mvals = _mm_loadu_ps(&in[i]);
-        __m128 melem1 = _mm_mul_ps(mvals,mtwo);
-        __m128 mres = _mm_sub_ps(melem1,mone);
-        _mm_store_ps(&out[i],mres);
-    }
-
-    for(int32t j = 0; j < endsize; j++)
-    {
-        __m128 mval = _mm_set_ss(in[i+j]);
-        __m128 melem2 = _mm_mul_ps(mval,mtwo);
-        __m128 mres = _mm_add_ps(melem2,mone);
-        _mm_store_ss(&out[i+j],mres);
-    }
-}
-#else
-void munpack01(float out[], const float in[], int32t size)
-{
-    if(size <= 0)
-        return ;
-
-    for(int32t i = 0; i < size; i++)
-        out[i] = munpack01(in[i]); 
-}
-#endif
-
-///////////////////////////////////////////////////////////////////////////////////////
-#ifdef MATH_PRIM_SSE
-void munpack01(float &xout, float &yout, float &zout, float xin, float yin, float zin)
-{
-    __m128 mone = _mm_set_ps(1.f,1.f,1.f,1.f);
-    __m128 mtwo = _mm_set_ps(2.f,2.f,2.f,2.f);
-
-    __m128 mvals = _mm_set_ps(0.0f,zin,yin,xin);
-
-    __m128 melem = _mm_mul_ps(mvals,mtwo);
-    __m128 mres = _mm_sub_ps(melem,mone);
-
-    float fres[4] = {0};
-    _mm_store_ps(fres,mres);
-
-    xout = fres[0];
-    yout = fres[1];
-    zout = fres[2];
-}
-#else
-void munpack01(float &xout, float &yout, float &zout, float xin, float yin, float zin)
-{
-    xout = munpack01(xin);
-    yout = munpack01(yin);
-    zout = munpack01(zin);
-}
-#endif
-
-///////////////////////////////////////////////////////////////////////////////////////
-#ifdef MATH_PRIM_SSE
-void munpack01_3(float out[], const float in[])
-{
-    __m128 mtwo = _mm_set_ps(2.f,2.f,2.f,2.f);
-    __m128 mone = _mm_set_ps(1.f,1.f,1.f,1.f);
-    __m128 mvals = _mm_set_ps(0.0f,in[2],in[1],in[0]);
-
-    __m128 melem = _mm_mul_ps(mvals,mtwo);
-    __m128 mres = _mm_sub_ps(melem,mone);
-
-    float fres[4] = {0};
-    _mm_store_ps(fres,mres);
-
-    memcpy(&out[0],&fres[0],sizeof(float)*3);
-}
-#else
-void munpack01_3(float out[], const float in[])
-{
-    out[0] = munpack01(in[0]);
-    out[1] = munpack01(in[1]);
-    out[2] = munpack01(in[2]);
-}
-#endif
-
-
-///////////////////////////////////////////////////////////////////////////////////////
-*/
 
 
 ///////////////////////////////////////////////////////////////////////////////////////

@@ -61,12 +61,12 @@ M_FORCEINL int64t mtoint(double d)
 // Absolute Value Functions
 ///////////////////////////////////////////////////////////////////////////////////////
 template <typename Ttype>
-M_INLINE Ttype  mabs(Ttype i)
+M_INLINE Ttype mabs(Ttype i)
 {
     return (i >> (sizeof(Ttype)-1)) ? ((~i)+1) : (i);
 }
 ///////////////////////////////////////////////////////////////////////////////////////
-M_INLINE float  mabs(float f)
+M_INLINE float mabs(float f)
 {
     return *(float*)&(*(int32t*)&f &= MATH_INT_MAX);
 }
@@ -79,7 +79,7 @@ M_INLINE double mabs(double d)
 ///////////////////////////////////////////////////////////////////////////////////////
 // Negate Values
 ///////////////////////////////////////////////////////////////////////////////////////
-M_INLINE float  mnegate(float f)
+M_INLINE float mnegate(float f)
 {
     return *(float*)&(*(int32t*)&f ^= MATH_INT_MIN);
 }
@@ -91,12 +91,12 @@ M_INLINE double mnegate(double d)
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
-M_INLINE bool  mnear0(float f)
+M_INLINE bool mnear0(float f)
 {
     return mabs(f) < FLOAT_EPS;
 }
 ///////////////////////////////////////////////////////////////////////////////////////
-M_INLINE bool  mnear0(double d)
+M_INLINE bool mnear0(double d)
 {
     return mabs(d) < DOUBLE_EPS;
 }
@@ -225,11 +225,10 @@ M_INLINE double mclamp01(double d)
 // Function Template Clamping Value
 ///////////////////////////////////////////////////////////////////////////////////////
 template <typename Ttype>
-M_INLINE Ttype  mclamp(const Ttype &min, const Ttype &max, const Ttype &val)
+M_INLINE Ttype mclamp(const Ttype &min, const Ttype &max, const Ttype &val)
 {
     return (val < min) ? (min) : ((val > max) ? max : val);
 }
-
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -244,7 +243,7 @@ M_INLINE bool mispow2(Ttype n)
 ///////////////////////////////////////////////////////////////////////////////////////
 // Set To Zero If Value Is Near 
 ///////////////////////////////////////////////////////////////////////////////////////
-M_INLINE float   malign0(float x)
+M_INLINE float malign0(float x)
 {
     if((x > -FLOAT_EPS) && (x < FLOAT_EPS))
         return 0.0f;
@@ -252,7 +251,7 @@ M_INLINE float   malign0(float x)
         return x;
 }
 ///////////////////////////////////////////////////////////////////////////////////////
-M_INLINE double  malign0(double x)
+M_INLINE double malign0(double x)
 {
     if((x > -DOUBLE_EPS) && (x < DOUBLE_EPS))
         return 0.0;
@@ -263,7 +262,7 @@ M_INLINE double  malign0(double x)
 ///////////////////////////////////////////////////////////////////////////////////////
 // Set To One If Value Is Nearly One
 ///////////////////////////////////////////////////////////////////////////////////////
-M_INLINE float   malign1(float x)
+M_INLINE float malign1(float x)
 {
     if( (x > (1.0f-FLOAT_EPS)) && (x < (1.0f+FLOAT_EPS)) )
         return 1.0f;
@@ -271,7 +270,7 @@ M_INLINE float   malign1(float x)
         return x;
 }
 ///////////////////////////////////////////////////////////////////////////////////////
-M_INLINE double  malign1(double x)
+M_INLINE double malign1(double x)
 {
     if( (x > (1.0-DOUBLE_EPS)) && (x < (1.0+DOUBLE_EPS)) )
         return 1.0;
@@ -283,12 +282,12 @@ M_INLINE double  malign1(double x)
 // Calculates The Floor Of A Value x
 ///////////////////////////////////////////////////////////////////////////////////////
 
-M_FORCEINL float   mfloor(float x)
+M_FORCEINL float mfloor(float x)
 {
     return floorf(x);
 }
 ///////////////////////////////////////////////////////////////////////////////////////
-M_FORCEINL double  mfloor(double x)
+M_FORCEINL double mfloor(double x)
 {
     return floor(x);
 }
@@ -297,12 +296,12 @@ M_FORCEINL double  mfloor(double x)
 ///////////////////////////////////////////////////////////////////////////////////////
 // Calculates The Ceiling Of A Value x
 ///////////////////////////////////////////////////////////////////////////////////////
-M_FORCEINL float   mceil(float x)
+M_FORCEINL float mceil(float x)
 {
     return ceilf(x);
 }
 ///////////////////////////////////////////////////////////////////////////////////////
-M_FORCEINL double  mceil(double x)
+M_FORCEINL double mceil(double x)
 {
     return ceil(x);
 }
@@ -312,7 +311,7 @@ M_FORCEINL double  mceil(double x)
 // Getting Maximum Value 
 ///////////////////////////////////////////////////////////////////////////////////////
 template <typename Ttype>
-Ttype   mmax(Ttype x, Ttype y)
+Ttype mmax(Ttype x, Ttype y)
 {
     return (x > y) ? (x) : (y);
 }   
@@ -320,7 +319,7 @@ Ttype   mmax(Ttype x, Ttype y)
 // Getting Minimum Value 
 ///////////////////////////////////////////////////////////////////////////////////////
 template <typename Ttype>
-Ttype   mmin(Ttype x, Ttype y)
+Ttype mmin(Ttype x, Ttype y)
 {
     return (x < y) ? (x) : (y);
 }
@@ -456,7 +455,7 @@ M_FORCEINL double  mfmodf(double x, double y)
 template <typename TReal>
 M_INLINE TReal mpack01(TReal x)
 {
-    const TReal half(0.5f);
+    const TReal half(0.5);
     return x * half + half;
 }
 

@@ -12,22 +12,22 @@
 #include "mathconsts.h"
 #include "mathlibdefs.h"
 
-//#include "Types/tfixed32.h"
-//#include "Types/tfixed64.h"
-//#include "Types/thalf.h"
+#include "types/tfixed32.h"
+#include "types/tfixed64.h"
+#include "types/thalf.h"
 
-//#include "Elementary/ElemFunc.h"
-//#include "Elementary/Sqrt.h"
-//#include "Elementary/Trigonometry.h"
+#include "elementary/elemfunc.h"
+#include "elementary/sqrt.h"
+#include "elementary/trigonometry.h"
+#include "elementary/interpolation.h"
 
-//#include "Random/Prng.h"
-//#include "Random/Perlin.h"
+#include "pseudorandom/prng.h"
+#include "pseudorandom/perlin.h"
 
-//#include "Algebra/Vector.h"
-//#include "Algebra/Plane.h"
-//#include "Algebra/Matrix.h"
-//#include "Algebra/Quaternion.h"
-//#include "Algebra/QuatCompress.h"
-//#include "Algebra/Algebra.h"
-
+#include "algebra/vector.h"
+#include "algebra/plane.h"
+#include "algebra/matrix.h"
+#include "algebra/quaternion.h"
+#include "algebra/quatcompress.h"
+#include "algebra/algebra.h"
 ///////////////////////////////////////////////////////////////////////////////////////

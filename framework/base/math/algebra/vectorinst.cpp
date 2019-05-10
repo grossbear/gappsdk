@@ -18,26 +18,33 @@
 #include "elementary/elemfunc.h"
 #include "elementary/sqrt.h"
 #include "elementary/trigonometry.h"
+#include "elementary/interpolation.h"
 
 #include "algebraelemfunc.inl"
 
 #include "vector.h"
 #include "vector.cpp"
+#include "vectorspec.cpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // CMVector2D Functions
 
 ///////////////////////////////////////////////////////////////////////////////////////
+// Performs A Linear Interpolation Between Two 2D Vectors
+template void CMVec2Lerp(CMVector2D<float> &vOut, const CMVector2D<float> &v1, 
+                                const CMVector2D<float> &v2, float weight);
+
+///////////////////////////////////////////////////////////////////////////////////////
 // Rotate A 2D Vector, Using The Specified Angle In Radians
-template void CMVec2Rotate<float>(CMVector2D<float> &vOut, const CMVector2D<float> &vIn, float rad);
+template void CMVec2Rotate(CMVector2D<float> &vOut, const CMVector2D<float> &vIn, float rad);
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Returns The Length Of A 2D Vector
-template float CMVec2Length<float>(const CMVector2D<float> &v);
+template float CMVec2Length(const CMVector2D<float> &v);
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Returns The Square Of The Length Of A 2D Vector
-template float CMVec2LengthSq<float>(const CMVector2D<float> &v);
+template float CMVec2LengthSq(const CMVector2D<float> &v);
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Calculate Length Between Two 2D Points
@@ -102,11 +109,14 @@ template void CMVec2Cosrp(CMVector2D<float> &vOut, const CMVector2D<float> &v1, 
 // CMVector2D Double Type Functions Instantiation
 #ifdef MATH_DOUBLE_INST
 ///////////////////////////////////////////////////////////////////////////////////////
-template void CMVec2Rotate<double>(CMVector2D<double> &vOut, const CMVector2D<double> &vIn, double rad);
+template void CMVec2Lerp(CMVector2D<double> &vOut, const CMVector2D<double> &v1, 
+                                 const CMVector2D<double> &v2, double weight);
 ///////////////////////////////////////////////////////////////////////////////////////
-template double CMVec2Length<double>(const CMVector2D<double> &v);
+template void CMVec2Rotate(CMVector2D<double> &vOut, const CMVector2D<double> &vIn, double rad);
 ///////////////////////////////////////////////////////////////////////////////////////
-template double CMVec2LengthSq<double>(const CMVector2D<double> &v);
+template double CMVec2Length(const CMVector2D<double> &v);
+///////////////////////////////////////////////////////////////////////////////////////
+template double CMVec2LengthSq(const CMVector2D<double> &v);
 ///////////////////////////////////////////////////////////////////////////////////////
 template double CMVec2Distance(const CMVector2D<double> &p0, const CMVector2D<double> &p1);
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -144,6 +154,11 @@ template void CMVec2Cosrp(CMVector2D<double> &vOut, const CMVector2D<double> &v1
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // CMVector3D Functions
+
+///////////////////////////////////////////////////////////////////////////////////////
+// Performs A Linear Interpolation Between Two 3D Vectors
+template void CMVec3Lerp(CMVector3D<float> &vOut, const CMVector3D<float> &v1, 
+                         const CMVector3D<float> &v2, float weight);
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Rotate A 3D Vector In X Axis, Using The Specified Angle In Radians
@@ -226,6 +241,8 @@ template void CMVec3Cosrp(CMVector3D<float> &vOut, const CMVector3D<float> &v1, 
 
 // CMVector3D Double Type Functions Instantiation
 #ifdef MATH_DOUBLE_INST
+template void CMVec3Lerp(CMVector3D<double> &vOut, const CMVector3D<double> &v1, 
+                         const CMVector3D<double> &v2, double weight);
 ///////////////////////////////////////////////////////////////////////////////////////
 template void CMVec3RotateX(CMVector3D<double> &vOut, const CMVector3D<double> &vIn, double rad);
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -276,6 +293,11 @@ template void CMVec3Cosrp(CMVector3D<double> &vOut, const CMVector3D<double> &v1
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // CMVector4D Functions
+
+///////////////////////////////////////////////////////////////////////////////////////
+// Performs A Linear Interpolation Between Two 4D Vectors
+template void CMVec4Lerp(CMVector4D<float> &vOut, const CMVector4D<float> &v1,
+                         const CMVector4D<float> &v2, float weight);
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Cross Product Of Two 4D Vectors
@@ -343,8 +365,8 @@ template void CMVec4Hermite(CMVector4D<float> &vOut, const CMVector4D<float> &v1
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Performs A Quadratic Interpolation, Using The Specified 4D Vectors
-template void CMVec4Quadratic(CMVector4D<float> &vOut, const CMVector4D<float> &v1, const CMVector4D<float> &v2,
-                     const CMVector4D<float> &v3, float factor);
+template void CMVec4Quadratic(CMVector4D<float> &vOut, const CMVector4D<float> &v1, 
+                              const CMVector4D<float> &v2, const CMVector4D<float> &v3, float factor);
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Performs A Cubic Interpolation, Using The Specified 4D Vectors
@@ -362,6 +384,9 @@ template void CMVec4Cosrp(CMVector4D<float> &vOut, const CMVector4D<float> &v1, 
 
 // CMVector4D Double Type Functions Instantiation
 #ifdef MATH_DOUBLE_INST
+///////////////////////////////////////////////////////////////////////////////////////
+template void CMVec4Lerp(CMVector4D<double> &vOut, const CMVector4D<double> &v1,
+                         const CMVector4D<double> &v2, double weight);
 ///////////////////////////////////////////////////////////////////////////////////////
 template void CMVec4Cross(CMVector4D<double> &vOut, const CMVector4D<double> &v1, const CMVector4D<double> &v2);
 ///////////////////////////////////////////////////////////////////////////////////////
