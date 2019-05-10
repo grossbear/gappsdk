@@ -457,7 +457,7 @@ template <typename TReal>
 M_INLINE TReal mpack01(TReal x)
 {
     const TReal half(0.5f);
-    return x*half + half;
+    return x * half + half;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -466,11 +466,10 @@ M_INLINE TReal mpack01(TReal x)
 template <typename TReal>
 M_INLINE TReal munpack01(TReal x)
 {
-    const TReal two(2);
-	const TReal one(1);
-	return x*two - one;
+    const TReal v1(1);
+    const TReal v2(2);
+    return x * v2 - v1;
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Smooth Step
@@ -478,26 +477,35 @@ M_INLINE TReal munpack01(TReal x)
 template <typename TReal>
 M_INLINE TReal msmoothstep(TReal x)
 {
-    return x * x * (T(3) - T(2) * x);
+    const TReal v2(2);
+    const TReal v3(3);
+    return x * x * (v3 - v2 * x);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
 template <typename TReal>
 M_INLINE TReal mquintic(TReal x)
 {
-    return x * x * x * (x * (x * T(6) - T(15)) + T(10)); 
+    const TReal v6(6);
+    const TReal v10(10);
+    const TReal v15(15);
+    return x * x * x * (x * (x * v6 - v15) + v10);
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 template <typename TReal>
 M_INLINE TReal msmoothstepderiv(TReal x)
 {
-    return x * (T(6) - T(6) * x); 
+    const TReal v6(6);
+    return x * (v6 - v6 * x);
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 template <typename TReal>
 M_INLINE TReal mquinticderiv(TReal x)
 {
-    return T(30) * x * x * (x * (x - T(2)) + T(1));
+    const TReal v1(1);
+    const TReal v2(2);
+    const TReal v30(30);
+    return v30 * x * x * (x * (x - v2) + v1);
 }
 
 
