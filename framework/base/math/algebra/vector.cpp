@@ -595,6 +595,26 @@ void CMVec3Cosrp(CMVector3D<T> &vOut, const CMVector3D<T> &v1, const CMVector3D<
     vOut.z = z;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////
+// Performs A Pack Operation Of All Values In 3D Vector From [-1,1] To [0,1]
+template <class T>
+void CMVec3Pack01(CMVector3D<T> &vOut, const CMVector3D<T> &vIn)
+{
+	vOut.x = mpack01(vIn.x);
+    vOut.y = mpack01(vIn.y);
+    vOut.z = mpack01(vIn.y);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+// Performs An Unpack Operation Of All Values In 3D Vector From [0,1] To [-1,1]
+template <class T>
+void CMVec3Unpack01(CMVector3D<T> &vOut, const CMVector3D<T> &vIn)
+{
+    vOut.x = munpack01(vIn.x);
+    vOut.y = munpack01(vIn.y);
+    vOut.z = munpack01(vIn.z);
+}
+///////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // 4D Vector
@@ -923,5 +943,27 @@ void CMVec4Cosrp(CMVector4D<T> &vOut, const CMVector4D<T> &v1, const CMVector4D<
     vOut.y = y;
     vOut.z = z;
     vOut.w = w;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+// Performs A Pack Operation Of All Values In 4D Vector From [-1,1] To [0,1]
+template <class T>
+void CMVec4Pack01(CMVector4D<T> &vOut, const CMVector4D<T> &vIn)
+{
+	vOut.x = mpack01(vIn.x);
+    vOut.y = mpack01(vIn.y);
+    vOut.z = mpack01(vIn.y);
+    vOut.w = mpack01(vIn.w);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+// Performs An Unpack Operation Of All Values In 4D Vector From [0,1] To [-1,1]
+template <class T>
+void CMVec4Unpack01(CMVector4D<T> &vOut, const CMVector4D<T> &vIn)
+{
+    vOut.x = munpack01(vIn.x);
+    vOut.y = munpack01(vIn.y);
+    vOut.z = munpack01(vIn.z);
+    vOut.w = munpack01(vIn.w);
 }
 ///////////////////////////////////////////////////////////////////////////////////////

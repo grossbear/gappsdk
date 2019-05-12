@@ -8,10 +8,7 @@
 #ifndef _ALGEBRA_ELEMENTARY_FUNC_INL
 #define _ALGEBRA_ELEMENTARY_FUNC_INL
 
-#ifdef MATH_PRIM_SSE
-#include <xmmintrin.h>
-#include <memory.h>
-#endif //MATH_PRIM_SSE
+
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Vec2
@@ -123,53 +120,6 @@ M_FORCEINL float MVEC2ACOS(float x)
 M_FORCEINL double MVEC2ACOS(double x)
 {
     return macos(x);
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
-M_FORCEINL void MVEC2PACK01(float vout[2], const float vin[2])
-{
-    vout[0] = mpack01(vin[0]);
-    vout[1] = mpack01(vin[1]);
-}
-///////////////////////////////////////////////////////////////////////////////////////
-M_FORCEINL void MVEC2PACK01(double vout[2], const double vin[2])
-{
-#ifdef MATH_ALGEBRA_SSE
-    const double tabvals[2] = {0.5, 0.5};
-    __m128d v05reg = _mm_load_pd(tabvals);
-    __m128d invreg = _mm_load_pd(vin);
-    
-    __m128d outvreg = _mm_fmadd_pd(invreg, v05reg, v05reg);
-   
-    _mm_store_pd(vout, outvreg);
-#else
-    vout[0] = mpack01(vin[0]);
-    vout[1] = mpack01(vin[1]);
-#endif
-}
-///////////////////////////////////////////////////////////////////////////////////////
-M_FORCEINL void MVEC2UNPACK01(float vout[2], const float vin[2])
-{
-    vout[0] = munpack01(vin[0]);
-    vout[1] = munpack01(vin[1]);
-}
-///////////////////////////////////////////////////////////////////////////////////////
-M_FORCEINL void MVEC2UNPACK01(double vout[2], const double vin[2])
-{
-#ifdef MATH_ALGEBRA_SSE
-    const double tabvals1[2] = {1.0,1.0};
-    const double tabvals2[2] = {2.0,2.0};
-    __m128d v1reg = _mm_load_pd(tabvals1);
-    __m128d v2reg = _mm_load_pd(tabvals2);
-    
-    __m128d invreg = _mm_load_pd(vin);
-    __m128d outvreg = _mm_fmsub_pd(invreg, v2reg, v1reg);
-    
-    _mm_store_pd(vout, outvreg);
-#else
-    vout[0] = munpack01(vin[0]);
-    vout[1] = munpack01(vin[1]);
-#endif
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -288,96 +238,8 @@ M_FORCEINL double MVEC3ACOS(double x)
 {
     return macos(x);
 }
-
-///////////////////////////////////////////////////////////////////////////////////////
-M_FORCEINL void MVEC3PACK01(float vout[3], const float vin[3])
-{
-#ifdef MATH_ALGEBRA_SSE
-    const float tabvals[4] = {0.5f,0.5f,0.5f,0.5f};
-    __m128 halfonevreg = _mm_load_ps(tabvals);
-    __m128 invreg = _mm_set_ps(0.0f,vin[2],vin[1],vin[0]);
-    
-    __m128 outvreg = _mm_fmadd_ps(invreg, halfonevreg, halfonevreg);
-    
-    float outvals[4] = {0.0f,0.0f,0.0f,0.0f};
-    _mm_store_ps(outvals, outvreg);
-    
-    memcpy(vout, outvals, sizeof(float)*3);
-#else
-    vout[0] = mpack01(vin[0]);
-    vout[1] = mpack01(vin[1]);
-    vout[2] = mpack01(vin[2]);
-#endif
-}
-///////////////////////////////////////////////////////////////////////////////////////
-M_FORCEINL void MVEC3PACK01(double vout[3], const double vin[3])
-{
-#ifdef MATH_ALGEBRA_SSE
-    const double tabhalf[4] = {0.5,0.5,0.5,0.5};
-    __m256d v05reg = _mm256_load_pd(tabhalf);
-    __m256d invreg = _mm256_set_pd(0.0,vin[2],vin[1],vin[0]);
-    
-    __m256d outvreg = _mm256_fmadd_pd(invreg, v05reg, v05reg);
-    
-    double outvals[4] = {0.0, 0.0, 0.0, 0.0};
-    _mm256_store_pd(outvals, outvreg);
-    
-    memcpy(vout, outvals, sizeof(double)*3);
-#else
-    vout[0] = mpack01(vin[0]);
-    vout[1] = mpack01(vin[1]);
-    vout[2] = mpack01(vin[2]);
-#endif
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
-M_FORCEINL void MVEC3UNPACK01(float vout[3], const float vin[3])
-{
-#ifdef MATH_ALGEBRA_SSE
-    const float tabvals1[4] = {1.0f,1.0f,1.0f,1.0f};
-    const float tabvals2[4] = {2.0f,2.0f,2.0f,2.0f};
-    __m128 onevreg = _mm_load_ps(tabvals1);
-    __m128 twovreg = _mm_load_ps(tabvals2);
-    
-    __m128 invreg = _mm_set_ps(0.0f,vin[2],vin[1],vin[0]);
-    __m128 outvreg = _mm_fmsub_ps(invreg, twovreg, onevreg);
-    
-    float outvals[4] = {0.0f,0.0f,0.0f,0.0f};
-    _mm_store_ps(outvals, outvreg);
-    
-    memcpy(vout, outvals, sizeof(float)*3);
-#else
-    vout[0] = munpack01(vin[0]);
-    vout[1] = munpack01(vin[1]);
-    vout[2] = munpack01(vin[2]);
-#endif
-}
-///////////////////////////////////////////////////////////////////////////////////////
-M_FORCEINL void MVEC3UNPACK01(double vout[3], const double vin[3])
-{
-#ifdef MATH_ALGEBRA_SSE
-    const double tabvals1[4] = {1.0,1.0,1.0,1.0};
-    const double tabvals2[4] = {2.0,2.0,2.0,2.0};
-    __m256d v1reg = _mm256_load_pd(tabvals1);
-    __m256d v2reg = _mm256_load_pd(tabvals2);
-    
-    __m256d invreg = _mm256_set_pd(0.0,vin[2],vin[1],vin[0]);
-    __m256d outvreg = _mm256_fmsub_pd(invreg, v2reg, v1reg);
-    
-    double outvals[4] = {0.0,0.0,0.0,0.0};
-    _mm256_store_pd(outvals, outvreg);
-    
-    memcpy(vout, outvals, sizeof(double)*3);
-#else
-    vout[0] = munpack01(vin[0]);
-    vout[1] = munpack01(vin[1]);
-    vout[2] = munpack01(vin[2]);
-#endif
-}
-
 ///////////////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -494,84 +356,6 @@ M_FORCEINL float MVEC4ACOS(float x)
 M_FORCEINL double MVEC4ACOS(double x)
 {
     return macos(x);
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
-M_FORCEINL void MVEC4PACK01(float vout[4], const float vin[4])
-{
-#ifdef MATH_ALGEBRA_SSE
-    const float tabvals[4] = {0.5f,0.5f,0.5f,0.5f};
-    __m128 halfonevreg = _mm_load_ps(tabvals);
-    __m128 invreg = _mm_load_ps(vin);
-    
-    __m128 outvreg = _mm_fmadd_ps(invreg, halfonevreg, halfonevreg);
-    
-    _mm_store_ps(vout, outvreg);
-#else
-    vout[0] = mpack01(vin[0]);
-    vout[1] = mpack01(vin[1]);
-    vout[2] = mpack01(vin[2]);
-    vout[3] = mpack01(vin[3]);
-#endif
-}
-///////////////////////////////////////////////////////////////////////////////////////
-M_FORCEINL void MVEC4PACK01(double vout[4], const double vin[4])
-{
-#ifdef MATH_ALGEBRA_SSE
-    const double tabhalf[4] = {0.5,0.5,0.5,0.5};
-    __m256d v05reg = _mm256_load_pd(tabhalf);
-    __m256d invreg = _mm256_set_pd(0.0,vin[2],vin[1],vin[0]);
-    
-    __m256d outvreg = _mm256_fmadd_pd(invreg, v05reg, v05reg);
-    
-    _mm256_store_pd(vout, outvreg);
-#else
-    vout[0] = mpack01(vin[0]);
-    vout[1] = mpack01(vin[1]);
-    vout[2] = mpack01(vin[2]);
-    vout[3] = mpack01(vin[3]);
-#endif
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
-M_FORCEINL void MVEC4UNPACK01(float vout[4], const float vin[4])
-{
-#ifdef MATH_ALGEBRA_SSE
-    const float tabvals1[4] = {1.0f,1.0f,1.0f,1.0f};
-    const float tabvals2[4] = {2.0f,2.0f,2.0f,2.0f};
-    __m128 onevreg = _mm_load_ps(tabvals1);
-    __m128 twovreg = _mm_load_ps(tabvals2);
-    
-    __m128 invreg = _mm_load_ps(vin);
-    __m128 outvreg = _mm_fmsub_ps(invreg, twovreg, onevreg);
-    
-    _mm_store_ps(vout, outvreg);
-#else
-    vout[0] = munpack01(vin[0]);
-    vout[1] = munpack01(vin[1]);
-    vout[2] = munpack01(vin[2]);
-    vout[3] = munpack01(vin[3]);
-#endif
-}
-///////////////////////////////////////////////////////////////////////////////////////
-M_FORCEINL void MVEC4UNPACK01(double vout[4], const double vin[4])
-{
-#ifdef MATH_ALGEBRA_SSE
-    const double tabvals1[4] = {1.0,1.0,1.0,1.0};
-    const double tabvals2[4] = {2.0,2.0,2.0,2.0};
-    __m256d v1reg = _mm256_load_pd(tabvals1);
-    __m256d v2reg = _mm256_load_pd(tabvals2);
-    
-    __m256d invreg = _mm256_load_pd(vin);
-    __m256d outvreg = _mm256_fmsub_pd(invreg, v2reg, v1reg);
-    
-    _mm256_store_pd(vout, outvreg);
-#else
-    vout[0] = munpack01(vin[0]);
-    vout[1] = munpack01(vin[1]);
-    vout[2] = munpack01(vin[2]);
-    vout[3] = munpack01(vin[3]);
-#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
