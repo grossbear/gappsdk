@@ -13,7 +13,9 @@
 //#define SIZE_INT_64
 
 #define __CPLUSPLUS_VER_98_     19971L
-#define __CPLUSPLUS_VER_11_     201103L 
+#define __CPLUSPLUS_VER_11_     201103L
+#define __CPLUSPLUS_VER_14_     201402L
+#define __CPLUSPLUS_VER_17_     201703L
 
 /*
 _WIN32
