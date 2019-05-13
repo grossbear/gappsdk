@@ -20,10 +20,20 @@
 #define M_FORCEINL     __inline
 #endif // Force Inline For Different Platforms
 
-// Primary Function That Has SSE Implementation
+// Functions that has SIMD instructions implementation
 #if defined (MATH_SIMD_EXT)
-#define MATH_PRIM_SSE
-#define MATH_ALGEBRA_SSE
+//https://software.intel.com/sites/landingpage/IntrinsicsGuide/# - The Intel Intrinsics Guide
+//ToDo: These flags should be manage in better way through Makefile or some development IDE
+#define MATH_MMX
+#define MATH_SSE
+#define MATH_SSE2
+#define MATH_SSE3
+#define MATH_SSE4_1
+#define MATH_SSE4_2
+#define MATH_AVX
+//--#define MATH_AVX2
+//--#define MATH_FMA
+//--#define MATH_AVX-512
 #endif //MATH_SIMD_EXT
 
 // Library Uses ILM Functions In Converting Float Types Into Half Type

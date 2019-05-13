@@ -6,23 +6,24 @@
 ///////////////////////////////////////////////////////////////////////////////////////
 #include <stdio.h>
 
-//#ifdef MATH_ALGEBRA_SSE
+//#ifdef MATH_SSE2
 #include <xmmintrin.h>
 //--#include <emmintrin.h>
 //--#include <immintrin.h>
 #include <memory.h>
-//#endif //MATH_ALGEBRA_SSE
+//#endif //MATH_SSE2
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Vector2D
 ///////////////////////////////////////////////////////////////////////////////////////
-#if defined(MATH_ALGEBRA_SSE) && defined(MATH_DOUBLE_INST)
+#if defined(MATH_SSE2) && defined(MATH_DOUBLE_INST)
 ///////////////////////////////////////////////////////////////////////////////////////
 // Performs A Linear Interpolation Between Two 2D Vectors
 template <>
 void CMVec2Lerp(CMVector2D<double> &vOut, const CMVector2D<double> &v1, const CMVector2D<double> &v2, double factor)
 {
     // v1 + ((v2 - v1)*factor);
+    printf("sse vector2 lerp\n");
     const double tabfact[2] = {factor,factor};
     __m128d factreg = _mm_load_pd(tabfact);
     __m128d v1reg = _mm_load_pd((const double*)v1);
@@ -70,7 +71,7 @@ void CMVec2Unpack01(CMVector2D<double> &vOut, const CMVector2D<double> &vIn)
     _mm_store_pd((double*)vOut, outvreg);
 }
 ///////////////////////////////////////////////////////////////////////////////////////
-#endif //MATH_ALGEBRA_SSE && MATH_DOUBLE_INST
+#endif //MATH_SSE2 && MATH_DOUBLE_INST
 
 /*
 ///////////////////////////////////////////////////////////////////////////////////////
