@@ -25,7 +25,7 @@ $(PROGNAME): $(patsubst %,$(OBJDIR)/%,$(_OBJ))
 	$(CXX) -o $@ $^
 
 mathlib.a:
-	make -C $(MATHLIBPATH) CLASSDATATYPES=MATH_DOUBLE_INST
+	make -C $(MATHLIBPATH) CLASSDATATYPES=MATH_DOUBLE_INST SIMDEXTFLAG=1
 	cp $(MATHLIBPATH)/mathlib.a $(OBJDIR)/mathlib.a
 	
 mathssedev.o: mathssedev.cpp

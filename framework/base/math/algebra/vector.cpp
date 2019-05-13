@@ -5,12 +5,13 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////////
 
-
+#include <stdio.h>
 ///////////////////////////////////////////////////////////////////////////////////////
 // Performs A Linear Interpolation Between Two 2D Vectors
 template <class T>
 void CMVec2Lerp(CMVector2D<T> &vOut, const CMVector2D<T> &v1, const CMVector2D<T> &v2, T weight)
 {
+	printf("math vector2 lerp\n");
     T x = mlerp(v1.x, v2.x, weight);
     T y = mlerp(v1.y, v2.y, weight);
 
