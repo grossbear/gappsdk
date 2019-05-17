@@ -15,6 +15,23 @@
 #include "elementary/interpolation.h"
 #include "prng.h"
 
+///////////////////////////////////////////////////////////////////////////////////////
+// Pseudo random number generation function
+// Returns values from 0 to 32767
+unsigned int mprng()
+{
+    // Our initial starting seed is 5323
+    static unsigned int nseed = 5323;
+
+    // Take the current seed and generate a new value from it
+    // due to our use of large constants and overflow, it would be
+    // very hard for someone to predict what the next number is
+    // going to be from the previous one.
+    nseed = (8253729 * nseed + 2396403);
+ 
+    // Take the seed and return a value between 0 and 32767
+    return nseed % 32767;
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Pseudo random number generation function

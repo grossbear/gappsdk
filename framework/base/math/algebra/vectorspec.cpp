@@ -11,7 +11,7 @@
 #include <memory.h>
 //#endif //SSE
 
-#if defined (MATH_AVX) || defined (MATH_AVX2) || defined (MATH_FMA) || defined (MATH_AVX-512)
+#if defined (MATH_AVX) || defined (MATH_AVX2) || defined (MATH_FMA) || defined (MATH_AVX_512)
 #include <immintrin.h>
 #endif //AVX
 

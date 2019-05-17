@@ -33,7 +33,7 @@
 //#define MATH_AVX
 //#define MATH_AVX2
 //#define MATH_FMA
-//--#define MATH_AVX-512
+//#define MATH_AVX_512
 #endif //MATH_SIMD_EXT
 
 // Library Uses ILM Functions In Converting Float Types Into Half Type
