@@ -28,11 +28,11 @@
 #define MATH_SSE
 #define MATH_SSE2
 #define MATH_SSE3
-#define MATH_SSE4_1
-#define MATH_SSE4_2
-#define MATH_AVX
-//--#define MATH_AVX2
-//--#define MATH_FMA
+//#define MATH_SSE4_1
+//#define MATH_SSE4_2
+//#define MATH_AVX
+//#define MATH_AVX2
+//#define MATH_FMA
 //--#define MATH_AVX-512
 #endif //MATH_SIMD_EXT
 

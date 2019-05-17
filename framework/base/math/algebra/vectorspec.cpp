@@ -6,12 +6,14 @@
 ///////////////////////////////////////////////////////////////////////////////////////
 #include <stdio.h>
 
-//#ifdef MATH_SSE2
+//#if defined (MATH_SSE2) || defined (MATH_SSE3)
 #include <xmmintrin.h>
-//--#include <emmintrin.h>
-//--#include <immintrin.h>
 #include <memory.h>
-//#endif //MATH_SSE2
+//#endif //SSE
+
+#if defined (MATH_AVX) || defined (MATH_AVX2) || defined (MATH_FMA) || defined (MATH_AVX-512)
+#include <immintrin.h>
+#endif //AVX
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Vector2D
@@ -30,8 +32,12 @@ void CMVec2Lerp(CMVector2D<double> &vOut, const CMVector2D<double> &v1, const CM
     __m128d v2reg = _mm_load_pd((const double*)v2);
     
     __m128d vsubreg = _mm_sub_pd(v2reg,v1reg);
+#ifdef MATH_FMA
+    __m128d outvreg = _mm_fmadd_pd(vsubreg,factreg,v1reg);
+#else
     __m128d vmulreg = _mm_mul_pd(vsubreg,factreg);
     __m128d outvreg = _mm_add_pd(v1reg,vmulreg);
+#endif
     
     _mm_store_pd((double*)vOut, outvreg);
 }
@@ -45,7 +51,7 @@ void CMVec2Pack01(CMVector2D<double> &vOut, const CMVector2D<double> &vIn)
     __m128d v05reg = _mm_load_pd(tabvals);
     __m128d invreg = _mm_load_pd((const double*)vIn);
     
-    //__m128d outvreg = _mm_fmadd_pd(invreg, v05reg, v05reg); --not working
+    //__m128d outvreg = _mm_fmadd_pd(invreg, v05reg, v05reg); --not compiling
     __m128d vprod = _mm_mul_pd(invreg, v05reg);
     __m128d outvreg = _mm_add_pd(vprod, v05reg);
    

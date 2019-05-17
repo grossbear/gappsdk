@@ -2,11 +2,22 @@
 
 CXX=g++
 ARCH=ar
-CFLAGS=-std=gnu++11 -Wall
+CFLAGS=-std=gnu++11 -Wall -msse2 -msse3 -msse4 -mpopcnt
 OBJDIR=obj
 FRAMEWORKPATH = ../../framework
 MATHPATH = ../../framework/base/math
 CMNDEFSHEADER = mathdefscommon.h
+
+# Default values.
+# CXX ?= g++
+#-CXXWARNINGS ?= -Wall -Wextra -Wundef -pedantic
+#-CXXINTRINSICS ?= -msse2 -msse3 -msse4 -mpopcnt
+#-CXXFEATURES ?= -funsafe-math-optimizations -fno-math-errno -std=c++11
+#-CXXFLAGS ?= ${CXXWARNINGS} ${CXXINTRINSICS} ${CXXFEATURES} -g -O3
+#+CXXWARNINGS += -Wall -Wextra -Wundef -pedantic
+#+CXXINTRINSICS += -msse2 -msse3 -msse4 -mpopcnt
+#+CXXFEATURES += -funsafe-math-optimizations -fno-math-errno -std=c++11
+#+CXXFLAGS += ${CXXWARNINGS} ${CXXINTRINSICS} ${CXXFEATURES} -g -O3
 
 CALCPRECFLAGS = 
 ifdef FLTSQRTPRECFLAG
