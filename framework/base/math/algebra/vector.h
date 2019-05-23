@@ -506,7 +506,7 @@ void CMVec4Sub(CMVector4D<T> &vOut, const CMVector4D<T> &v1, const CMVector4D<T>
 ///////////////////////////////////////////////////////////////////////////////////////
 // Dot Product Between Two 4D Vectors
 template <class T>
-T CMVec4Dot(const CMVector3D<T> &v1, const CMVector3D<T> &v2);
+T CMVec4Dot(const CMVector4D<T> &v1, const CMVector4D<T> &v2);
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Returns A 4D Vector That Is Made Up Of The Largest Components Of Two 4D Vectors
