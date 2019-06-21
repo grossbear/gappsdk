@@ -14,33 +14,11 @@
 
 using namespace std;
 
-///////////////////////////////////////////////////////////////////////////////////////
-//window system
-class CWindowSystem
-{
-public:
-    CWindowSystem(EventListener *evt)
-    {
-        mEventListener = evt;
-    }
-    
-    ~CWindowSystem()
-    {
-        mEventListener = nullptr;
-    }
-    
-    void ProcessEvents(){}
-    
-    int CreateWindow(){return 0;}
-    
-    bool ReleaseWindoe(int window_id){return false;}
-    
-protected:
-    EventListener *mEventListener;
-};
+class CWindowSystem;
+
 
 ///////////////////////////////////////////////////////////////////////////////////////
-class CApplicationBase
+class CApplicationBase : public EventListener
 {
 private:
     CApplicationBase() = delete;
@@ -74,6 +52,8 @@ protected:
     
     virtual void RunMainProcess();
     
+    bool CreateWindow();
+    
 protected:
     size_t GetArgsCount() const;
     string GetArgs(size_t index) const;
@@ -87,7 +67,7 @@ private:
     
     bool mAppRunning;
     
-    CWindowSystem mWinSys;
+    CWindowSystem *mWinSys;
 };
 ///////////////////////////////////////////////////////////////////////////////////////
 

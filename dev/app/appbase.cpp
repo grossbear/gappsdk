@@ -5,12 +5,14 @@
 ///////////////////////////////////////////////////////////////////////////////////////
 
 #include "appbase.h"
+#include "winsys.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////
 CApplicationBase::CApplicationBase(const string &app_name, const vector<string> &args):
 mAppName(app_name),mArgs(args),
 mAppInited(false),mAppReleased(false),
-mWinSys(nullptr)
+mAppRunning(true),
+mWinSys(new CWindowSystem(this))
 {
     printf("AppBase constructor l-value\n");
 }
@@ -18,13 +20,17 @@ mWinSys(nullptr)
 CApplicationBase::CApplicationBase(string &&app_name, vector<string> &&args):
 mAppName(std::move(app_name)),mArgs(std::move(args)),
 mAppInited(false),mAppReleased(false),
-mWinSys(nullptr)
+mAppRunning(true),
+mWinSys(new CWindowSystem(this))
 {
     printf("AppBase constructor r-value\n");
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 CApplicationBase::~CApplicationBase()
 {
+    delete (mWinSys);
+    mWinSys = nullptr;
+    
     printf("AppBase destructor\n");
 }
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -44,19 +50,17 @@ void CApplicationBase::Run()
     
     while(IsAppRunning())
     {
-        mWinSys.ProcessEvents();
+        mWinSys->ProcessEvents();
         RunMainProcess();
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 int CApplicationBase::Result() 
 {
-    printf("result\n");
     if(!IsInitSucceded()) return -1;
     if(!IsReleaseSucceded()) return -2;
     
     return 0;
-    
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 // Protected methods
@@ -80,5 +84,10 @@ bool CApplicationBase::IsAppRunning() const { return mAppRunning; }
 ///////////////////////////////////////////////////////////////////////////////////////
 void CApplicationBase::StopApp() { mAppRunning = false; }
 ///////////////////////////////////////////////////////////////////////////////////////
-void CApplicationBase::RunMainProcess() { StopApp(); }
+void CApplicationBase::RunMainProcess() { printf("1\n"); StopApp(); }
+///////////////////////////////////////////////////////////////////////////////////////
+bool CApplicationBase::CreateWindow()
+{
+    mWinSys->CreateWindow();
+}
 ///////////////////////////////////////////////////////////////////////////////////////

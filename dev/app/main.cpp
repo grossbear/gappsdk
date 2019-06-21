@@ -18,11 +18,12 @@ vector<string> get_args_vec(int argc, char *argv[])
     for(int i = 1; i < argc; i++)
     {
         string str_arg(argv[i]);
-      args_vec.push_back(std::move(str_arg));     
+        args_vec.push_back(std::move(str_arg));     
     }
     return std::move(args_vec);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////
 int del_app_get_result(CApplicationBase *app)
 {
     int result = app->Result();
@@ -31,7 +32,9 @@ int del_app_get_result(CApplicationBase *app)
     return result;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////
 // Programm entry point
+///////////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char *argv[])
 {
     printf("App research prog\n");
@@ -45,3 +48,4 @@ int main(int argc, char *argv[])
     
     return del_app_get_result(app);
 }
+///////////////////////////////////////////////////////////////////////////////////////
