@@ -21,7 +21,7 @@ CWindowSystem::~CWindowSystem()
     mEventListener = nullptr;
 }
 ///////////////////////////////////////////////////////////////////////////////////////
-int CWindowSystem::CreateWindow()
+int CWindowSystem::CreateDisplayWindow()
 {
     int screen = DefaultScreen(mDisplay);
     mWindow = XCreateSimpleWindow(mDisplay, RootWindow(mDisplay, screen), 10, 10, 660, 200, 1,
@@ -35,7 +35,7 @@ int CWindowSystem::CreateWindow()
     return 0;
 }
 ///////////////////////////////////////////////////////////////////////////////////////
-bool CWindowSystem::ReleaseWindow()
+bool CWindowSystem::ReleaseDisplayWindow()
 {
     return false;
 }

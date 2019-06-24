@@ -52,7 +52,7 @@ protected:
     
     virtual void RunMainProcess();
     
-    bool CreateWindow();
+    bool CreateDisplayWindow();
     
 protected:
     size_t GetArgsCount() const;

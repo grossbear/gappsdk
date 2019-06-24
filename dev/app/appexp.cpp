@@ -28,7 +28,7 @@ CAppExp::~CAppExp()
 void CAppExp::Init()
 {
     printf("App experiment Init func\n");
-    CreateWindow();
+    CreateDisplayWindow();
     SetInitSuccess();
 }
 ///////////////////////////////////////////////////////////////////////////////////////

@@ -12,15 +12,15 @@ class EventListener;
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
-// Window managment system #experimental version
+// XWindow managment system #experimental version
 class CWindowSystem
 {
 public:
     CWindowSystem(EventListener *listener);
     ~CWindowSystem();
     
-    int CreateWindow();
-    bool ReleaseWindow();
+    int CreateDisplayWindow();
+    bool ReleaseDisplayWindow();
     void ProcessEvents();
     
 protected:
