@@ -8,22 +8,22 @@
 #define __EVENT_LISTENER_H__
 
 ///////////////////////////////////////////////////////////////////////////////////////
-class EventListener
+class InputEventListener
 {
 public:
-    EventListener(){}
-    virtual ~EventListener(){}
+    InputEventListener(){}
+    virtual ~InputEventListener(){}
     
-    virtual void OnKeyDown(unsigned key){}
-    virtual void OnKeyUp(unsigned key){}
+    virtual void OnKeyDownEvt(unsigned key){}
+    virtual void OnKeyUpEvt(unsigned key){}
     
-    virtual void OnMouseBtnDown(int x, int y){}
-    virtual void OnMouseBtnUp(int x, int y){}
+    virtual void OnMouseBtnDownEvt(int x, int y){}
+    virtual void OnMouseBtnUpEvt(int x, int y){}
     
-    virtual void OnSetSize(int w, int h){}
+    virtual void OnWindowSetSizeEvt(int w, int h){}
     
-    virtual void OnQuit(){}
-    virtual void OnClose(){}
+    virtual void OnQuitEvt(){}
+    virtual void OnCloseEvt(){}
 };
 ///////////////////////////////////////////////////////////////////////////////////////
 

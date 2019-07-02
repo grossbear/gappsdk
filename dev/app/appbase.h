@@ -18,22 +18,22 @@ class CWindowSystem;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
-class CApplicationBase : public EventListener
+class CApplicationBase //: public InputEventListener
 {
 private:
-    CApplicationBase() = delete;
-    CApplicationBase(const CApplicationBase&) = delete;
-    CApplicationBase operator = (const CApplicationBase&) = delete;
+    //CApplicationBase() = delete;
+    //CApplicationBase(const CApplicationBase&) = delete;
+    //CApplicationBase operator = (const CApplicationBase&) = delete;
 
 protected:
-    CApplicationBase(const string &app_name, const vector<string> &args);
-    CApplicationBase(string &&app_name, vector<string> &&args);
+    CApplicationBase(const string &app_name, const vector<string> &args, InputEventListener *listener);
+    CApplicationBase(string &&app_name, vector<string> &&args, InputEventListener *listener);
     
 public:
     virtual ~CApplicationBase();
     
-    virtual void Init();
-    virtual void Release();
+    virtual void Init() = 0;
+    virtual void Release() = 0;
     
     void Run();
     int Result();
@@ -50,13 +50,16 @@ protected:
     bool IsAppRunning() const;
     void StopApp();
     
-    virtual void RunMainProcess();
-    
-    bool CreateDisplayWindow();
-    
-protected:
     size_t GetArgsCount() const;
     string GetArgs(size_t index) const;
+    
+    virtual void RunMainProcess();
+    
+    
+    
+protected:
+    bool CreateDisplayWindow();
+    
     
 private:
     vector<string> mArgs;
@@ -67,6 +70,7 @@ private:
     
     bool mAppRunning;
     
+    InputEventListener *mListener;
     CWindowSystem *mWinSys;
 };
 ///////////////////////////////////////////////////////////////////////////////////////

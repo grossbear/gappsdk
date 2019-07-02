@@ -16,11 +16,23 @@ public:
     virtual void Init() override;
     virtual void Release() override;
     
-    virtual void OnQuit() override;
-    virtual void OnClose() override;
+    virtual void OnQuit();
+    virtual void OnClose();
     
 protected:
     virtual void RunMainProcess() override;
+    
+    class ExpAppEventListener : public InputEventListener {
+    public:
+        ExpAppEventListener(CAppExp *app):mApp(app){}
+        ~ExpAppEventListener(){mApp=nullptr;}
+        
+        virtual void OnQuitEvt(){mApp->OnQuit();}
+        virtual void OnCloseEvt(){mApp->OnClose();}
+    private:
+        CAppExp *mApp;
+    };
+
 };
 ///////////////////////////////////////////////////////////////////////////////////////
 

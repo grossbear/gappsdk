@@ -10,12 +10,12 @@ CApplicationBase* CreateApplication(vector<string> &&args)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
-CAppExp::CAppExp(const vector<string> &args):CApplicationBase(APPEXP_NAME,args)
+CAppExp::CAppExp(const vector<string> &args):CApplicationBase(APPEXP_NAME,args,new ExpAppEventListener(this))
 {
     printf("CAppExp constructor l-value\n");
 }
 ///////////////////////////////////////////////////////////////////////////////////////
-CAppExp::CAppExp(vector<string> &&args):CApplicationBase(APPEXP_NAME,std::move(args))
+CAppExp::CAppExp(vector<string> &&args):CApplicationBase(APPEXP_NAME,std::move(args),new ExpAppEventListener(this))
 {
     printf("CAppExp constructor r-value\n");
 }

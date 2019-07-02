@@ -6,9 +6,8 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-//#include <X11/Xos.h>
 
-class EventListener;
+class InputEventListener;
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -16,7 +15,7 @@ class EventListener;
 class CWindowSystem
 {
 public:
-    CWindowSystem(EventListener *listener);
+    CWindowSystem(InputEventListener *listener);
     ~CWindowSystem();
     
     int CreateDisplayWindow();
@@ -24,7 +23,7 @@ public:
     void ProcessEvents();
     
 protected:
-    EventListener *mEventListener;
+    InputEventListener *mEventListener;
     
     Display *mDisplay;
     Window mWindow;

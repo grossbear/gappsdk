@@ -8,7 +8,7 @@
 #include "xwinsys.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////
-CWindowSystem::CWindowSystem(EventListener *listener):mEventListener(listener)
+CWindowSystem::CWindowSystem(InputEventListener *listener):mEventListener(listener)
 {
     mDisplay = XOpenDisplay(nullptr);
     
@@ -54,13 +54,13 @@ void CWindowSystem::ProcessEvents()
         KeySym keysym;
         int len = XLookupString(&event.xkey, buffer, sizeof(buffer), &keysym, NULL);
         if (keysym == XK_Escape) {
-            mEventListener->OnQuit();
+            mEventListener->OnQuitEvt();
         }
     }
     else if ((event.type == ClientMessage) &&
              (static_cast<unsigned int>(event.xclient.data.l[0]) == mDelWndMsg))
     {
-        mEventListener->OnClose();
+        mEventListener->OnCloseEvt();
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////

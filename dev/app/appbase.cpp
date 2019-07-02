@@ -8,20 +8,22 @@
 #include "winsys.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////
-CApplicationBase::CApplicationBase(const string &app_name, const vector<string> &args):
+CApplicationBase::CApplicationBase(const string &app_name, const vector<string> &args, InputEventListener *listener):
 mAppName(app_name),mArgs(args),
 mAppInited(false),mAppReleased(false),
 mAppRunning(true),
-mWinSys(new CWindowSystem(this))
+mListener(listener),
+mWinSys(new CWindowSystem(listener))
 {
     printf("AppBase constructor l-value\n");
 }
 ///////////////////////////////////////////////////////////////////////////////////////
-CApplicationBase::CApplicationBase(string &&app_name, vector<string> &&args):
+CApplicationBase::CApplicationBase(string &&app_name, vector<string> &&args, InputEventListener *listener):
 mAppName(std::move(app_name)),mArgs(std::move(args)),
 mAppInited(false),mAppReleased(false),
 mAppRunning(true),
-mWinSys(new CWindowSystem(this))
+mListener(listener),
+mWinSys(new CWindowSystem(listener))
 {
     printf("AppBase constructor r-value\n");
 }
@@ -40,9 +42,9 @@ string CApplicationBase::GetAppName() const
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
-void CApplicationBase::Init() {}
+//--void CApplicationBase::Init() {}
 ///////////////////////////////////////////////////////////////////////////////////////
-void CApplicationBase::Release() {}
+//--void CApplicationBase::Release() {}
 ///////////////////////////////////////////////////////////////////////////////////////
 
 
