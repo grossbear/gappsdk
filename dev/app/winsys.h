@@ -23,8 +23,10 @@ public:
     void ProcessEvents();
     
 protected:
-    Display *mDisplay;
-    Window mWindow;
+    Display *mXDisplay;
+    Visual *mXVisual;
+    Window mXRootWindow;
+    Window mXWindow;
     Atom mDelWndMsg;
 };
 ////////////////////////////////////////////////////////////////////////////////////////
