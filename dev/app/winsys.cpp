@@ -66,6 +66,11 @@ int CWindowSystem::CreateDisplayWindow()
     int x = 100, y = 100;
     mXWindow = XCreateWindow(mXDisplay, mXRootWindow, x,y,width,height, 0, CopyFromParent, InputOutput, mXVisual, attr_mask, &xattributes);
 
+    //Creating window without toolbar
+    //Atom window_type = XInternAtom(mXDisplay, "_NET_WM_WINDOW_TYPE", False);
+    //long value = XInternAtom(mXDisplay, "_NET_WM_WINDOW_TYPE_DOCK", False);
+    //XChangeProperty(mXDisplay, mXWindow, window_type, XA_ATOM, 32, PropModeReplace, (unsigned char *) &value, 1);
+
     //long mask = ExposureMask | KeyPressMask | SubstructureNotifyMask | StructureNotifyMask | PropertyChangeMask | ResizeRedirectMask;
     //XSelectInput(mDisplay, mWindow, mask);
 
