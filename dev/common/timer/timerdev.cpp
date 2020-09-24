@@ -14,8 +14,6 @@ int main()
         angle *= (double)i;
     }
 
-    //float angle = sinf(3.14159f);
-
     timer.Stop();
 
     double deltatime = timer.GetTime();
